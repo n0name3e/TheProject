@@ -22,7 +22,7 @@ public class Bullet : MonoBehaviour
         }
         if (collision.transform.TryGetComponent(out PlayerHealth player))
         {
-            player.Hit();
+            player.Hit(transform);
         }
         Destroy(gameObject);
     }

@@ -4,7 +4,8 @@ public class PlayerShotting : MonoBehaviour
 {
     [SerializeField] private LayerMask shootableLayer;
     [SerializeField] private ParticleSystem shootParticle; // wish it was Visual Effect
-    [SerializeField] private Animator weaponAnimator;
+    [SerializeField] private WeaponManager weaponManager;
+    [SerializeField] private ParticleSystem hitParticles; // when enemy is hit
     private Camera mainCamera;
 
     private void Start()
@@ -14,16 +15,17 @@ public class PlayerShotting : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
             Shoot();
         }
     }
     private void Shoot()
     {
-        shootParticle.Play();
-        weaponAnimator.SetTrigger("Shoot");
-
+        if (!weaponManager.CanShoot())
+            return;
+        //shootParticle.Play();
+        weaponManager.Shoot();
         RaycastHit hit;
         if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, 100f, shootableLayer))
         {
@@ -33,6 +35,8 @@ public class PlayerShotting : MonoBehaviour
             {
                 print("hit");
                 enemy.Hit();
+                hitParticles.transform.position = hit.point;
+                hitParticles.Emit(15);
             }
         }
     }

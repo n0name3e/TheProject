@@ -53,9 +53,9 @@ Material:
     - _StencilWriteMask: 255
     - _UIMaskSoftnessX: 1
     - _UIMaskSoftnessY: 1
-    - _health: 0.4
+    - _health: 0
     - _hearts: 5
-    - _whiteHeart: 1
+    - _whiteHeart: 0
     m_Colors:
     - _ClipRect: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
