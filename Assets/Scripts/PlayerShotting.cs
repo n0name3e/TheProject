@@ -6,6 +6,7 @@ public class PlayerShotting : MonoBehaviour
     [SerializeField] private ParticleSystem shootParticle; // wish it was Visual Effect
     [SerializeField] private WeaponManager weaponManager;
     [SerializeField] private ParticleSystem hitParticles; // when enemy is hit
+    [SerializeField] private ParticleSystem explosionParticles;
     private Camera mainCamera;
 
     private void Start()
@@ -22,7 +23,7 @@ public class PlayerShotting : MonoBehaviour
     }
     private void Shoot()
     {
-        if (!weaponManager.CanShoot())
+        if (!weaponManager.CanShoot() || Time.timeScale == 0)
             return;
         //shootParticle.Play();
         weaponManager.Shoot();
@@ -37,6 +38,17 @@ public class PlayerShotting : MonoBehaviour
                 enemy.Hit();
                 hitParticles.transform.position = hit.point;
                 hitParticles.Emit(15);
+                return;
+            }
+            if (hitObject.TryGetComponent(out Barrel barrel))
+            {
+                barrel.Explode();
+
+                Destroy(hitObject.gameObject);
+            }
+            if (hitObject.TryGetComponent(out BreakablePallet pallet))
+            {
+                pallet.Destroy();
             }
         }
     }

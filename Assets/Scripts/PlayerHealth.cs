@@ -37,7 +37,6 @@ public class PlayerHealth : MonoBehaviour
             return;
         }
         flickeringTimer -= Time.deltaTime;
-
     }
 
     public void Hit(Transform hitter)

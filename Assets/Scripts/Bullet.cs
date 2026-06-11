@@ -24,6 +24,11 @@ public class Bullet : MonoBehaviour
         {
             player.Hit(transform);
         }
+        // means it collided with camera or something, just lets bullet go forward
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            return;
+        }
         Destroy(gameObject);
     }
 }

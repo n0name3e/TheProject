@@ -1,4 +1,3 @@
-using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,10 +8,12 @@ public enum WeaponType
 }
 public class WeaponManager : MonoBehaviour
 {
+    private static readonly int RifleReloadHash = Animator.StringToHash("rifleReload");
     private static readonly int UnequipRifleHash = Animator.StringToHash("unequipRifle");
     private static readonly int UnequipPistolHash = Animator.StringToHash("unequipPistol");
     private static readonly int EquipRifleHash = Animator.StringToHash("equipRifle");
     private static readonly int EquipPistolHash = Animator.StringToHash("equipPistol");
+    private static readonly int RifleReloadAltHash = Animator.StringToHash("rifle_reload_alt");
     private Animator animator;
     [SerializeField] private CameraController cameraController;
     [SerializeField] private GameObject pistolHands;
@@ -98,7 +99,14 @@ public class WeaponManager : MonoBehaviour
         {
             if (rifleAvailableAmmo > 0)
             {
-                animator.CrossFade("rifleReload", 0.2f);
+                int r = Random.Range(0, 100);
+                if (r < 20 || (rifleCurrentAmmo == 0 || r < 60))
+                {
+                    animator.Play(RifleReloadAltHash);
+                }
+                else
+                    animator.Play(RifleReloadHash);
+
                 int beforeAmmo = rifleCurrentAmmo;
                 int targetAmmo = Mathf.Min((rifleCurrentAmmo + rifleAvailableAmmo), rifleMaxAmmo);
                 rifleCurrentAmmo = targetAmmo;
@@ -214,5 +222,13 @@ public class WeaponManager : MonoBehaviour
             return false;
         }
         return true;
+    }
+    public void CollectAmmo(int amount)
+    {
+        rifleAvailableAmmo += amount;
+        if (currentWeapon == WeaponType.Rifle)
+        {
+            UI.Instance.SetAmmoText(rifleCurrentAmmo, rifleMaxAmmo, rifleAvailableAmmo);
+        }
     }
 }
