@@ -31,11 +31,19 @@ public class PlayerShotting : MonoBehaviour
         if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, 100f, shootableLayer))
         {
             Transform hitObject = hit.transform;
-            print(hitObject.name);
+            print("hit: " + hitObject.name);
             if (hitObject.TryGetComponent(out Enemy enemy))
             {
                 print("hit");
                 enemy.Hit();
+                hitParticles.transform.position = hit.point;
+                hitParticles.Emit(15);
+                return;
+            }
+            if (hitObject.TryGetComponent(out Boss boss))
+            {
+                print("hit boss");
+                boss.Hit();
                 hitParticles.transform.position = hit.point;
                 hitParticles.Emit(15);
                 return;

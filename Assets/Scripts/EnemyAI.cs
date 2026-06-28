@@ -59,7 +59,7 @@ public class EnemyAI : MonoBehaviour
             }
             else
             {
-                print(gameObject.name + " chasing");
+                //print(gameObject.name + " chasing");
                 ChasePlayer();
             }
 
@@ -71,7 +71,7 @@ public class EnemyAI : MonoBehaviour
     }
     private void CheckPlayer()
     {
-        print(gameObject.name + " Checking");
+        //print(gameObject.name + " Checking");
         if (CanSeePlayer())
         {
             isChasing = true;
@@ -84,7 +84,7 @@ public class EnemyAI : MonoBehaviour
         Debug.DrawRay(eyePosition.position, ((player.position - new Vector3(0, 0, 0)) - transform.position) * 75, Color.red, 0.25f);
         if (Physics.Raycast(eyePosition.position, (player.position - new Vector3(0, 0, 0)) - transform.position, out hit, detectionRange, validLayers))
         {
-            print(gameObject.name + ": " + hit.transform.name);
+            //print(gameObject.name + ": " + hit.transform.name);
             if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
                 return true;
@@ -96,9 +96,12 @@ public class EnemyAI : MonoBehaviour
     {
         if (Vector3.Distance(player.position + new Vector3(0, 1, 0), transform.position) <= attackRange)
         {
-            agent.isStopped = true;
+            if (CanSeePlayer())
+            {
+                agent.isStopped = true;
 
-            enemy.Attack();
+                enemy.Attack();
+            }
         }
         else
         {
@@ -112,7 +115,6 @@ public class EnemyAI : MonoBehaviour
     // can be called from some events
     public void ActivateChasing()
     {
-        print("doofijv");
         isChasing = true;
     }
 }

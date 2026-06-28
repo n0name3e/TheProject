@@ -101,7 +101,7 @@ public class Boss : MonoBehaviour
         }
         else if (random < 80)
         {
-            MinigunBarrage();
+            StartCoroutine(MinigunBarrage());
         }
         else
         {
@@ -110,6 +110,7 @@ public class Boss : MonoBehaviour
     }
     private IEnumerator MinigunBarrage()
     {
+        print("minigun barrage");
         attackTimer = 5f; // just in case some attack would like to interfere
         idleTimer = 5f;
         for (int i = 0; i < 20; i++)
@@ -167,7 +168,7 @@ public class Boss : MonoBehaviour
 
         Destroy(bulletObject, 3f);
     }
-    private bool CanSeePlayer()
+    public bool CanSeePlayer()
     {
         RaycastHit hit;
         if (Physics.Raycast(eyePosition.position, (player.position - new Vector3(0, 1.2f, 0)) - transform.position, out hit, 100f, validLayers))

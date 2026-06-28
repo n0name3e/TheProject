@@ -31,6 +31,7 @@ public class UI : MonoBehaviour
 
     public void SetHealth(float current, float max)
     {
+        health.material.SetFloat("_hearts", max);
         health.material.SetFloat("_health", current / max);
     }
     public void EnablePC()

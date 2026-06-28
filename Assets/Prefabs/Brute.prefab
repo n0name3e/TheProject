@@ -126,6 +126,7 @@ GameObject:
   - component: {fileID: 1040636283051463085}
   - component: {fileID: 3293325853094765072}
   - component: {fileID: 3123016688062599093}
+  - component: {fileID: 5235639380112642381}
   m_Layer: 7
   m_Name: Brute
   m_TagString: Untagged
@@ -187,13 +188,36 @@ MonoBehaviour:
   detectionRange: 25
   validLayers:
     serializedVersion: 2
-    m_Bits: 65
+    m_Bits: 577
   player: {fileID: 0}
   startingDestination: {fileID: 0}
   eyePosition: {fileID: 9135527226795043542}
   isChasing: 0
   agent: {fileID: 3293325853094765072}
   enemy: {fileID: 673597791656561652}
+--- !u!136 &5235639380112642381
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7398149660011387389}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.75
+  m_Height: 3.5
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &5610309880696831612
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -387,7 +411,23 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: c39fd739609cbae40899e8e0cc408865, type: 3}
     - target: {fileID: 4312150326840193197, guid: c8a1b218158d5dc4c8e557715e326986, type: 3}
+      propertyPath: m_Height
+      value: 6.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4312150326840193197, guid: c8a1b218158d5dc4c8e557715e326986, type: 3}
+      propertyPath: m_Radius
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4312150326840193197, guid: c8a1b218158d5dc4c8e557715e326986, type: 3}
       propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4312150326840193197, guid: c8a1b218158d5dc4c8e557715e326986, type: 3}
+      propertyPath: m_Center.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4312150326840193197, guid: c8a1b218158d5dc4c8e557715e326986, type: 3}
+      propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6156133286819524915, guid: c8a1b218158d5dc4c8e557715e326986, type: 3}

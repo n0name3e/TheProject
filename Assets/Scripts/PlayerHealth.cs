@@ -62,4 +62,18 @@ public class PlayerHealth : MonoBehaviour
         isImmune = true;
         immunityTimer = immunityTime;
     }
+    public void Heal()
+    {
+        if (health >= maxHealth)
+        {
+            maxHealth++;
+            health = maxHealth;
+        }
+        else
+        {
+            health++;
+        }
+        print(health);
+        UI.Instance.SetHealth(health, maxHealth);
+    }
 }

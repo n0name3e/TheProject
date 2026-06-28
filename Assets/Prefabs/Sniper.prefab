@@ -127,7 +127,7 @@ MonoBehaviour:
   detectionRange: 100
   validLayers:
     serializedVersion: 2
-    m_Bits: 65
+    m_Bits: 577
   player: {fileID: 0}
   startingDestination: {fileID: 0}
   eyePosition: {fileID: 5671818686653244441}

@@ -179,6 +179,10 @@ public class Enemy : MonoBehaviour
         }
         if (Health <= 0)
         {
+            if (TryGetComponent(out Drop drop))
+            {
+                drop.DropItem();
+            }
             Destroy(transform.parent.gameObject);
         }
     }

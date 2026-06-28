@@ -24,6 +24,10 @@ public class Bullet : MonoBehaviour
         {
             player.Hit(transform);
         }
+        /*if (collision.transform.TryGetComponent(out BreakablePallet pallet))
+        {
+            pallet.Destroy();
+        }*/
         // means it collided with camera or something, just lets bullet go forward
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {

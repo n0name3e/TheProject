@@ -16,6 +16,7 @@ public class BossAI : MonoBehaviour
     {
         if (agent == null)
             agent = GetComponent<NavMeshAgent>();
+        agent.updateRotation = false;
         if (boss == null)
             boss = GetComponentInChildren<Boss>();
 
@@ -35,8 +36,23 @@ public class BossAI : MonoBehaviour
         {
             ChasePlayer();
         }
+        FacePlayer();
     }
+    private void FacePlayer()
+    {
+        // 1. Get the direction to the player
+        Vector3 direction = (player.position - transform.position).normalized;
 
+        // 2. Lock the Y axis so the boss stays flat on the floor
+        direction.y = 0;
+
+        // 3. If we are perfectly on top of the boss, avoid math errors
+        if (direction == Vector3.zero) return;
+
+        // 4. Calculate the rotation and apply it smoothly
+        Quaternion lookRotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 8f);
+    }
     private void ChasePlayer()
     {
         if (boss.idleTimer <= 0)
@@ -44,18 +60,18 @@ public class BossAI : MonoBehaviour
             agent.isStopped = false;
             agent.SetDestination(player.position);
         }
+        else
+        {
+            agent.isStopped = true;
+        }
         if (boss.attackTimer <= 0)
         {
             boss.Attack();
         }
-        /*if (Vector3.Distance(player.position, transform.position) <= attackRange)
-        {
-            agent.isStopped = true;
+        if (boss.CanSeePlayer())
+            boss.Attack();
 
-            if (CanSeePlayer())
-                boss.Attack();
-        }
-        else
+        /*else
         {
             if (boss.attackTimer <= 0)
             {
