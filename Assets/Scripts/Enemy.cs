@@ -109,6 +109,8 @@ using UnityEngine;
 using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
+    private static readonly int AttackHash = Animator.StringToHash("Attack");
+
     [field: SerializeField] public float MaxHealth { get; private set; } = 4f;
     public float Health { get; private set; } = 4f;
     [SerializeField] private bool isRanged = true;
@@ -122,6 +124,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float inaccuracyMultiplier = 1f; // less is more accurate
     [Space(5)]
     [SerializeField] private Animator weaponAnimator;
+    [SerializeField] private Sledgehammer weapon;
 
     [SerializeField] private Transform player;
     [SerializeField] private Transform shootPosition;
@@ -132,9 +135,18 @@ public class Enemy : MonoBehaviour
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private ParticleSystem shootParticles;
     [SerializeField] private ParticleSystem hitParticle;
+
+    [Header("Aduio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip shootSound;
+    [SerializeField] private AudioClip hitSound;
     private void Awake()
     {
         //agent = GetComponentInParent<NavMeshAgent>();
+        if (audioSource == null)
+        {
+            audioSource = GetComponentInChildren<AudioSource>();
+        }
     }
     void Start()
     {
@@ -177,12 +189,15 @@ public class Enemy : MonoBehaviour
             hitParticle.transform.position = transform.position;
             hitParticle.Emit(damage * 12);
         }
+        audioSource.PlayOneShot(hitSound);
         if (Health <= 0)
         {
             if (TryGetComponent(out Drop drop))
             {
                 drop.DropItem();
             }
+            audioSource.transform.SetParent(null, true);
+            Destroy(audioSource.gameObject, 2f);
             Destroy(transform.parent.gameObject);
         }
     }
@@ -205,12 +220,12 @@ public class Enemy : MonoBehaviour
     }
     private void MeleeAttack()
     {
-        weaponAnimator.SetTrigger("Attack");
+        weaponAnimator.SetTrigger(AttackHash);
     }
     private void RangedAttack()
     {
         shootParticles.Play();
-
+        audioSource.PlayOneShot(shootSound);
         GameObject bulletObject = Instantiate(bulletPrefab, shootPosition.position, transform.rotation);
 
         Vector3 direction = (player.position - transform.position).normalized;
@@ -224,5 +239,13 @@ public class Enemy : MonoBehaviour
         bullet.Launch(bulletSpeed, direction.normalized);
 
         Destroy(bulletObject, 3f);
+    }
+    public void HitWithMeleeWeapon()
+    {
+        if (weapon == null)
+        {
+            return;
+        }
+        weapon.Hit();
     }
 }

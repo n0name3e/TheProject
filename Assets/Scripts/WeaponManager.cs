@@ -23,11 +23,12 @@ public class WeaponManager : MonoBehaviour
     [SerializeField] private ParticleSystem rifleShootEffect;
 
     // this could have possible be done with dictionary<enum, int> but for 2 weapons whatever
+    // or with scriptable objects
     // magazine size
-    [SerializeField] private int rifleMaxAmmo = 20;
+    [SerializeField] private int rifleMaxAmmo = 15;
     [SerializeField] private int pistolMaxAmmo = 8;
     // current magazine amount
-    private int rifleCurrentAmmo = 20;
+    private int rifleCurrentAmmo = 15;
     private int pistolCurrentAmmo = 8;
     // bullets that player carries (pistol is unlimited)
     public int rifleAvailableAmmo { get; private set; } = 40;
@@ -36,6 +37,19 @@ public class WeaponManager : MonoBehaviour
     [SerializeField] private float rifleCooldown = 0.12f;
     [SerializeField] private float pistolRecoilMultiplier = 2f;
     [SerializeField] private float rifleRecoilMultiplier = 1f;
+
+    [Header("Aduio")]
+    [SerializeField] private AudioSource shootAudio;
+    [SerializeField] private AudioClip rifleShoot;
+    [SerializeField] private AudioClip pistolShoot;
+    [SerializeField] private AudioClip rifleReloadStart;
+    [SerializeField] private AudioClip rifleReloadEnd;
+    [SerializeField] private AudioClip pistolReloadStart;
+    [SerializeField] private AudioClip pistolReloadEnd;
+    [SerializeField] private AudioClip emptyFire;
+    [SerializeField] private AudioClip rifleEquip;
+    [SerializeField] private AudioClip pistolEquip;
+
     private float currentCooldown = 0f;
     public WeaponType currentWeapon { get; private set; } = WeaponType.Rifle;
     private bool isInteracting;
@@ -84,6 +98,8 @@ public class WeaponManager : MonoBehaviour
                 return true;
             }
         }
+        shootAudio.PlayOneShot(emptyFire);
+        currentCooldown = pistolCooldown;
         return false;
     }
     public void Reload()
@@ -93,24 +109,24 @@ public class WeaponManager : MonoBehaviour
         if (currentWeapon == WeaponType.Pistol && pistolCurrentAmmo < pistolMaxAmmo)
         {
             animator.CrossFade("pistolReload", 0.2f);
-            pistolCurrentAmmo = pistolMaxAmmo;
+            //pistolCurrentAmmo = pistolMaxAmmo;
         }
         if (currentWeapon == WeaponType.Rifle && rifleCurrentAmmo < rifleMaxAmmo)
         {
             if (rifleAvailableAmmo > 0)
             {
                 int r = Random.Range(0, 100);
-                if (r < 20 || (rifleCurrentAmmo == 0 || r < 60))
+                if (r < 20 || (rifleCurrentAmmo == 0 && r < 60))
                 {
                     animator.Play(RifleReloadAltHash);
                 }
                 else
                     animator.Play(RifleReloadHash);
 
-                int beforeAmmo = rifleCurrentAmmo;
+                /*int beforeAmmo = rifleCurrentAmmo;
                 int targetAmmo = Mathf.Min((rifleCurrentAmmo + rifleAvailableAmmo), rifleMaxAmmo);
                 rifleCurrentAmmo = targetAmmo;
-                rifleAvailableAmmo -= targetAmmo - beforeAmmo;
+                rifleAvailableAmmo -= targetAmmo - beforeAmmo;*/
             }
         }
     }
@@ -194,6 +210,7 @@ public class WeaponManager : MonoBehaviour
         // can't shoot while swapping weapons or reloading!
         if (isInteracting)
             return;
+        shootAudio.pitch = Random.Range(0.9f, 1.1f);
         if (currentWeapon == WeaponType.Pistol)
         {
             //animator.Play(PistolShootHash);
@@ -203,6 +220,8 @@ public class WeaponManager : MonoBehaviour
             currentCooldown = pistolCooldown;
             cameraController.TriggerRecoil(pistolRecoilMultiplier);
             pistolShootEffect.Play();
+            shootAudio.pitch = Random.Range(0.8f, 0.95f);
+            shootAudio.PlayOneShot(pistolShoot);
         }
         else
         {
@@ -213,6 +232,7 @@ public class WeaponManager : MonoBehaviour
             currentCooldown = rifleCooldown;
             cameraController.TriggerRecoil(rifleRecoilMultiplier);
             rifleShootEffect.Play();
+            shootAudio.PlayOneShot(rifleShoot);
         }
     }
     public bool CanSprint()
@@ -230,5 +250,44 @@ public class WeaponManager : MonoBehaviour
         {
             UI.Instance.SetAmmoText(rifleCurrentAmmo, rifleMaxAmmo, rifleAvailableAmmo);
         }
+    }
+    public void IncreaseRifleAmmo(int amount)
+    {
+        rifleMaxAmmo += amount;
+        rifleCurrentAmmo += amount;
+        if (currentWeapon == WeaponType.Rifle)
+        {
+            UI.Instance.SetAmmoText(rifleCurrentAmmo, rifleMaxAmmo, rifleAvailableAmmo);
+        }
+    }
+    public void PlayRifleReloadStart()
+    {
+        shootAudio.pitch = Random.Range(0.9f, 1.1f);
+        shootAudio.PlayOneShot(rifleReloadStart);
+    }
+    public void PlayRifleReloadEnd()
+    {
+        shootAudio.pitch = Random.Range(0.9f, 1.1f);
+        shootAudio.PlayOneShot(rifleReloadEnd);
+    }
+    public void PlayPistolReloadStart()
+    {
+        shootAudio.pitch = Random.Range(0.9f, 1.1f);
+        shootAudio.PlayOneShot(pistolReloadStart);
+    }
+    public void PlayPistolReloadEnd()
+    {
+        shootAudio.pitch = Random.Range(0.9f, 1.1f);
+        shootAudio.PlayOneShot(pistolReloadEnd);
+    }
+    public void PlayEquipRifle()
+    {
+        shootAudio.pitch = 1f;
+        shootAudio.PlayOneShot(rifleEquip);
+    }
+    public void PlayEquipPistol()
+    {
+        shootAudio.pitch = 1f;
+        shootAudio.PlayOneShot(pistolEquip);
     }
 }

@@ -3,6 +3,8 @@ using UnityEngine;
 public class CollectibleAmmo : MonoBehaviour, IInteractable
 {
     public bool isInteractable { get; set; } = true;
+    [field: SerializeField] public AudioClip interactSound { get; set; }
+
     public bool isRotating = true;
     public bool isDestroying = true; // if not then some object will be removed (like remove magazine from rifle)
     public GameObject objectToDestroy;

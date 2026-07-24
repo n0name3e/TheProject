@@ -3,6 +3,8 @@ using UnityEngine;
 public class Door : MonoBehaviour, IInteractable
 {
     [field: SerializeField] public bool isInteractable { get; set; } = true; // if false then use PC
+    [field: SerializeField] public AudioClip interactSound { get; set; }
+
     [SerializeField] private GameObject offCube;
     [SerializeField] private GameObject onCube;
     

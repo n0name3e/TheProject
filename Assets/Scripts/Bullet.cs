@@ -4,13 +4,28 @@ public class Bullet : MonoBehaviour
 {
     private float Speed;
     private Vector3 Direction;
+    public bool destroyOnHit = true;
+    private float time = 3f;
 
     private void Update()
     {
         transform.position += Speed * Time.deltaTime * Direction;
+        time -= Time.deltaTime;
+        if (time <= 0)
+        {
+            if (destroyOnHit)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
+        }
     }
     public void Launch(float speed, Vector3 direction)
     {
+        time = 3f;
         Speed = speed;
         Direction = direction;
     }
@@ -33,6 +48,13 @@ public class Bullet : MonoBehaviour
         {
             return;
         }
-        Destroy(gameObject);
+        if (destroyOnHit)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

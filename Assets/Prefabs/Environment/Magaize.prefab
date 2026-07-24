@@ -101,6 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f67958b87918204e9d4fa3e28a7f1a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CollectibleAmmo
+  <interactSound>k__BackingField: {fileID: 8300000, guid: 5f6332ad64529f740abbd1de343b6d0c, type: 3}
   isRotating: 1
   isDestroying: 1
   objectToDestroy: {fileID: 0}

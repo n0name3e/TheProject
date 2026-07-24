@@ -22,6 +22,10 @@ public class PlayerMovement : MonoBehaviour
     
     void Update()
     {
+        if (UI.Instance.isCutscene)
+        {
+            return;
+        }
         HandleMovement();
     }
     private void Start()

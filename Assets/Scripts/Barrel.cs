@@ -2,11 +2,18 @@
 public class Barrel : MonoBehaviour
 {
 	[SerializeField] private ParticleSystem explosionParticles;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip explosionSound;
+
     [SerializeField] private int enemyDamage = 6;
     [SerializeField] private float radius = 7f;
     [SerializeField] private bool canFall;
     public void Explode()
     {
+        if (explosionParticles == null)
+        {
+            explosionParticles = UI.Instance.explosionParticles;
+        }
         explosionParticles.transform.position = transform.position;
         explosionParticles.Emit(60);
 
@@ -35,6 +42,9 @@ public class Barrel : MonoBehaviour
                 }
             }
         }
+        audioSource.transform.SetParent(null, true);
+        audioSource.PlayOneShot(explosionSound);
+        Destroy(audioSource, 2f);
         Destroy(gameObject);
     }
     private void OnCollisionEnter(Collision collision)

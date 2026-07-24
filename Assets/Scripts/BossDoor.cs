@@ -1,12 +1,17 @@
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class BossDoor : MonoBehaviour, IInteractable
 {
     public bool isInteractable { get; set; } = false;
     [SerializeField] private GameObject onCube;
     [SerializeField] private GameObject offCube;
-    [SerializeField] private Transform tpPosition;
-    [SerializeField] private BossAI bossToActivate;
+    //[SerializeField] private Transform tpPosition;
+    [SerializeField] private PlayableDirector cutscene;
+    [field: SerializeField] public AudioClip interactSound { get; set; }
+
+    //private PlayerMovement playerMovement;
+    //[SerializeField] private BossAI bossToActivate;
 
     public void Activate()
     {
@@ -16,10 +21,17 @@ public class BossDoor : MonoBehaviour, IInteractable
     }
     public void Interact()
     {
-        CharacterController player = FindAnyObjectByType<PlayerMovement>().GetComponent<CharacterController>();
-        player.enabled = false;
-        player.transform.position = tpPosition.position;
-        player.enabled = true;
-        bossToActivate.ActivateBoss();
+        //cutscene.Play();
+        cutscene.GetComponent<BossCutscene>().StartCutscene();
+        UI.Instance.isCutscene = true;
+        UI.Instance.isBoss = true;
+
+        for (int i = EnemyAI.AllActiveEnemies.Count - 1; i >= 0; i--)
+        {
+            if (EnemyAI.AllActiveEnemies[i] != null && EnemyAI.AllActiveEnemies[i].gameObject.activeInHierarchy)
+            {
+                Destroy(EnemyAI.AllActiveEnemies[i].gameObject);
+            }
+        }
     }
 }

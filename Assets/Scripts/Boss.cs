@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.AI;
 public class Boss : MonoBehaviour
 {
+    private static readonly int MinigunBashHash = Animator.StringToHash("MinigunBash");
+    private static readonly int MinigunThrustHash = Animator.StringToHash("MinigunThrust");
+    private static readonly int SummonSkeletonHash = Animator.StringToHash("SummonSkeleton");
+
     [field: SerializeField] public float MaxHealth { get; private set; } = 60f;
     public float Health { get; private set; } = 60f;
 
@@ -14,7 +18,8 @@ public class Boss : MonoBehaviour
     [SerializeField] private float bulletSpeed = 10f;
     [SerializeField] private float inaccuracyMultiplier = 1f; // less is more accurate
     [Space(5)]
-    [SerializeField] private Animator weaponAnimator;
+    [SerializeField] private Animator animator;
+    [SerializeField] private Sledgehammer weapon;
 
     [SerializeField] private Transform player;
     [SerializeField] private Transform shootPosition;
@@ -22,7 +27,8 @@ public class Boss : MonoBehaviour
     [SerializeField] private GameObject grenadePrefab;
     [SerializeField] private LayerMask validLayers;
     [SerializeField] private Transform eyePosition;
-    //[SerializeField] private List<EnemyAI> skeletons = new List<EnemyAI>();
+    [SerializeField] private List<EnemyAI> skeletons = new List<EnemyAI>();
+    private List<GameObject> bulletPool = new List<GameObject>();
 
     public float attackTimer { get; private set; } = 0f;
     public float idleTimer { get; private set; } = 0f; // when boss does'nt attack but move
@@ -33,6 +39,8 @@ public class Boss : MonoBehaviour
     private void Awake()
     {
         //agent = GetComponentInParent<NavMeshAgent>();
+        if (animator == null)
+            animator = GetComponent<Animator>();
     }
     void Start()
     {
@@ -41,6 +49,12 @@ public class Boss : MonoBehaviour
         if (player == null)
         {
             player = FindAnyObjectByType<PlayerMovement>().transform;
+        }
+        for (int i = 0; i < 30; i++)
+        {
+            GameObject b = Instantiate(bulletPrefab);
+            b.SetActive(false);
+            bulletPool.Add(b);
         }
     }
 
@@ -90,23 +104,42 @@ public class Boss : MonoBehaviour
         //attackTimer = attackCooldown;
         // attacks
         float random = Random.Range(0, 100);
+        if (Vector3.Distance(player.position, transform.position) <= 3f && random >= 10)
+        {
+            MeleeAttack();
+            return;
+        }
 
-        /*if (random < 20 && skeletons.Count > 0)
+        if (random < 20 && skeletons.Count > 0)
         {
+            print("skeleon");
             SummonSkeleton();
-        }*/
-        if (random < 40)
+        }
+        else if (random < 60 && CanSeePlayer())
         {
-            GrenadeThrow();
+            StartCoroutine(MinigunBarrage());
         }
         else if (random < 80)
         {
-            StartCoroutine(MinigunBarrage());
+            GrenadeThrow();
         }
         else
         {
             attackTimer = 0.5f;
         }
+    }
+    private void MeleeAttack()
+    {
+        if (Random.Range(0, 100) < 60)
+        {
+            animator.Play(MinigunBashHash);
+        }
+        else
+        {
+            animator.Play(MinigunThrustHash);
+        }
+        idleTimer = 2f;
+        attackTimer = 3f;
     }
     private IEnumerator MinigunBarrage()
     {
@@ -115,11 +148,24 @@ public class Boss : MonoBehaviour
         idleTimer = 5f;
         for (int i = 0; i < 20; i++)
         {
+            if (Health <= 0)
+                break;
             RangedAttack();
             yield return new WaitForSeconds(0.1f);
         }
         idleTimer = 2f;
         attackTimer = 4f; // actual no-attack time
+    }
+    private GameObject GetBulletFromPool()
+    {
+        foreach (GameObject b in bulletPool)
+        {
+            if (!b.activeInHierarchy)
+            {
+                return b;
+            }
+        }
+        return null; 
     }
     private void GrenadeThrow()
     {
@@ -134,10 +180,13 @@ public class Boss : MonoBehaviour
     }
     private void SummonSkeleton()
     {
-        /*float currentMinDistance = Mathf.Infinity;
+        animator.Play(SummonSkeletonHash);
+        float currentMinDistance = Mathf.Infinity;
         EnemyAI currentSkeleton = null;
         foreach (EnemyAI skeleton in skeletons)
         {
+            if (skeleton.gameObject.activeInHierarchy)
+                continue;
             float dist = Vector3.Distance(transform.position, skeleton.transform.position);
             if (dist < currentMinDistance)
             {
@@ -145,16 +194,28 @@ public class Boss : MonoBehaviour
                 currentMinDistance = dist;
             }
         }
-        currentSkeleton.gameObject.SetActive(true);
-        currentSkeleton.ActivateChasing();
-        idleTimer = 3f;
-        attackTimer = 6f;*/
+        if (currentSkeleton != null)
+        {
+            currentSkeleton.gameObject.SetActive(true);
+            currentSkeleton.ActivateChasing();
+            skeletons.Remove(currentSkeleton);
+            idleTimer = 1f;
+            attackTimer = 3f;
+        }
+        else
+        {
+            StartCoroutine(MinigunBarrage());
+        }
+
     }
     private void RangedAttack()
     {
         shootParticles.Play();
-
-        GameObject bulletObject = Instantiate(bulletPrefab, shootPosition.position, transform.rotation);
+        GameObject bulletObject = GetBulletFromPool();
+        if (bulletObject == null)
+            return;
+        //GameObject bulletObject = Instantiate(bulletPrefab, shootPosition.position, transform.rotation);
+        bulletObject.transform.position = shootPosition.position;
 
         Vector3 direction = (player.position - transform.position).normalized;
         Vector3 inaccuracy = new Vector3(Random.Range(-0.2f, 0.2f) * inaccuracyMultiplier,
@@ -163,10 +224,11 @@ public class Boss : MonoBehaviour
         bulletObject.transform.rotation = Quaternion.LookRotation(direction);
         bulletObject.transform.Rotate(90, 0, 0);
         Bullet bullet = bulletObject.GetComponent<Bullet>();
-
+        bullet.destroyOnHit = false;
+        bulletObject.SetActive(true);
         bullet.Launch(bulletSpeed, direction.normalized);
 
-        Destroy(bulletObject, 3f);
+        //Destroy(bulletObject, 3f);
     }
     public bool CanSeePlayer()
     {
@@ -179,5 +241,9 @@ public class Boss : MonoBehaviour
             }
         }
         return false;
+    }
+    public void MinigunBash()
+    {
+        weapon.Hit();
     }
 }

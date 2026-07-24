@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class LootableBox : MonoBehaviour, IInteractable
 {
+    [field: SerializeField] public AudioClip interactSound { get; set; }
+
     public bool isInteractable { get; set; } = true;
     public GameObject objectToCreate;
 

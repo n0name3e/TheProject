@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -18,6 +19,17 @@ public class EnemyAI : MonoBehaviour
 
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private Enemy enemy;
+
+    public static List<EnemyAI> AllActiveEnemies = new List<EnemyAI>();
+
+    void OnEnable()
+    {
+        AllActiveEnemies.Add(this);
+    }
+    void OnDisable()
+    {
+        AllActiveEnemies.Remove(this);
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

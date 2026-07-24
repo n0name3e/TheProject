@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 public class UI : MonoBehaviour
 {
@@ -9,8 +10,13 @@ public class UI : MonoBehaviour
     [SerializeField] private GameObject PC;
     [SerializeField] private GameObject interactableStuff;
 
+    [SerializeField] private Image damageOverlay;
     [SerializeField] private TMP_Text currentAmmoText;
     [SerializeField] private TMP_Text availableAmmoText;
+    [SerializeField] private GameObject HUD;
+    public bool isBoss = false;
+    public ParticleSystem explosionParticles; // why not
+    public bool isCutscene = false;
     private int whiteHeartEnabled = 0;
 
     private void Awake()
@@ -28,11 +34,26 @@ public class UI : MonoBehaviour
     {
         DisableWhiteHeart();
     }
-
+    private void Update()
+    {
+        if (damageOverlay.color.a > 0) {
+            Color c = damageOverlay.color;
+            c.a = Mathf.MoveTowards(c.a, 0f, Time.deltaTime / 2f);
+            damageOverlay.color = c;
+        }
+    }
     public void SetHealth(float current, float max)
     {
         health.material.SetFloat("_hearts", max);
         health.material.SetFloat("_health", current / max);
+    }
+    public void EnableHUD()
+    {
+        HUD.SetActive(true);
+    }
+    public void DisableHUD()
+    {
+        HUD.SetActive(false);
     }
     public void EnablePC()
     {
@@ -45,6 +66,12 @@ public class UI : MonoBehaviour
         PC.SetActive(false);
         Time.timeScale = 1;
         Cursor.lockState = CursorLockMode.Locked;
+    }
+    public void ActivateDamageEffect()
+    {
+        Color c = damageOverlay.color;
+        c.a = 0.2f;
+        damageOverlay.color = c;
     }
     public void ToggleWhiteHeart()
     {

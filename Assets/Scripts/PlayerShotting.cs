@@ -6,7 +6,9 @@ public class PlayerShotting : MonoBehaviour
     [SerializeField] private ParticleSystem shootParticle; // wish it was Visual Effect
     [SerializeField] private WeaponManager weaponManager;
     [SerializeField] private ParticleSystem hitParticles; // when enemy is hit
+    [SerializeField] private ParticleSystem environmentHitParticles; // when world object is hit
     [SerializeField] private ParticleSystem explosionParticles;
+
     private Camera mainCamera;
 
     private void Start()
@@ -40,6 +42,14 @@ public class PlayerShotting : MonoBehaviour
                 hitParticles.Emit(15);
                 return;
             }
+            if (hitObject.GetComponentInChildren<Enemy>())
+            {
+                enemy = hitObject.GetComponentInChildren<Enemy>();
+                print("hit");
+                enemy.Hit();
+                hitParticles.transform.position = hit.point;
+                hitParticles.Emit(15);
+            }
             if (hitObject.TryGetComponent(out Boss boss))
             {
                 print("hit boss");
@@ -58,6 +68,8 @@ public class PlayerShotting : MonoBehaviour
             {
                 pallet.Destroy();
             }
+            environmentHitParticles.transform.position = hit.point;
+            environmentHitParticles.Emit(15);
         }
     }
 }

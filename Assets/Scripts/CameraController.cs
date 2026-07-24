@@ -25,7 +25,7 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         // player is dead
-        if (Time.timeScale <= 0 || player == null)
+        if (Time.timeScale <= 0 || player == null || UI.Instance.isCutscene)
         {          
             return;
         }
@@ -42,10 +42,22 @@ public class CameraController : MonoBehaviour
     {
         targetRecoilRotation += new Vector3(-recoilX * recoilMultiplier, Random.Range(-recoilY * recoilMultiplier, +recoilY * recoilMultiplier), Random.Range(-recoilZ, +recoilZ));
     }
+    public void ApplyHitFlinch(float intensity)
+    {
+        // Flinch always kicks the camera aggressively UP (negative X in Unity rotation)
+        float flinchX = Random.Range(-intensity, -intensity * 0.5f);
+
+        // Flinch randomly jerks the camera left or right (Y) and tilts the head (Z)
+        float flinchY = Random.Range(-intensity, intensity);
+        float flinchZ = Random.Range(-intensity * 0.5f, intensity * 0.5f);
+
+        // Add this massive spike to your existing recoil system
+        targetRecoilRotation += new Vector3(flinchX, flinchY, flinchZ);
+    }
     public void TriggerDeath(Vector3 direction)
     {
         GetComponent<Collider>().enabled = true;
         GetComponent<Rigidbody>().isKinematic = false;
-        GetComponent<Rigidbody>().AddForce(direction * 5f, ForceMode.Impulse);
+        GetComponent<Rigidbody>().AddForce(direction * 6f, ForceMode.Impulse);
     }
 }

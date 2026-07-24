@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 756246747704206934}
   - component: {fileID: 7655836902648465515}
   - component: {fileID: 4567230453052000458}
+  - component: {fileID: -702144413764010713}
   m_Layer: 0
   m_Name: Grenade
   m_TagString: Untagged
@@ -140,3 +141,17 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-702144413764010713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3638660119183386091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 456ea41e982147d4db8579420dd47758, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Grenade
+  explosionParticles: {fileID: 0}
+  radius: 7
