@@ -18,36 +18,54 @@ public class PlayerInteracting : MonoBehaviour
     void Update()
     {
         RaycastHit hit;
-        // should make it not every frame
+        // should make it not every frame // done i guess // no its really bad
         if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward,
              out hit, 3f, layers))
         {
             if (hit.transform.TryGetComponent(out IInteractable interactable))
             {
-                if (interactable.isInteractable)
-                {
-                    currentInteractable = interactable;
-                }
-                return;
+                currentInteractable = interactable;
+            }
+            else
+            {
+                currentInteractable = null;
             }
         }
-        currentInteractable = null;
-    }
-    private void LateUpdate()
-    {
+        else
+        {
+            currentInteractable = null;
+        }
         if (Input.GetKeyDown(KeyCode.E))
         {
             if (currentInteractable != null)
             {
-                currentInteractable.Interact();
-                if (currentInteractable.interactSound != null)
+                if (currentInteractable.isInteractable)
                 {
-                    interactionSource.pitch = Random.Range(0.9f, 1.1f);
-                    interactionSource.PlayOneShot(currentInteractable.interactSound);
+                    currentInteractable.Interact();
+                    if (currentInteractable.interactSound != null)
+                    {
+                        interactionSource.pitch = Random.Range(0.9f, 1.1f);
+                        interactionSource.PlayOneShot(currentInteractable.interactSound);
+                    }
                 }
+                else
+                {
+                    if (currentInteractable.interactSound != null)
+                    {
+                        interactionSource.pitch = Random.Range(0.9f, 1.1f);
+                        interactionSource.PlayOneShot(currentInteractable.nonInteractableSound);
+                    }
+                }
+
                 currentInteractable = null;
             }
         }
-        UI.Instance.ToggleInteractableStuff(currentInteractable != null && Time.timeScale != 0);
+        if (Time.timeScale == 0f)
+        {
+            UI.Instance.ToggleInteractableStuff(null);
+            return;
+        }
+        UI.Instance.ToggleInteractableStuff(currentInteractable);
     }
+
 }

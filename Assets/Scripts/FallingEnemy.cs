@@ -15,7 +15,8 @@ public class FallingEnemy : MonoBehaviour
     {
         if (isFalling)
         {
-            Destroy(gameObject);
+            GetComponentInChildren<Enemy>().Hit(10, true);
+            //Destroy(gameObject);
         }
     }
 }

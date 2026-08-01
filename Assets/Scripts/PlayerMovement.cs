@@ -12,6 +12,14 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private Transform hands;
 
+    [Header("Footsteps")]
+    [SerializeField] private AudioSource footstepAudioSource;
+    [SerializeField] private AudioClip[] footstepClips; 
+    [SerializeField] private float walkStepInterval = 0.5f;
+    [SerializeField] private float sprintStepInterval = 0.3f;
+
+    private float footstepTimer = 0f;
+
     private Camera mainCamera;
     private Vector3 startingCameraPosition;
     private Vector3 startingHandsPosition;
@@ -27,6 +35,7 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
         HandleMovement();
+        HandleStepSounds();
     }
     private void Start()
     {
@@ -77,6 +86,23 @@ public class PlayerMovement : MonoBehaviour
         }
         characterController.Move(finishMovement * Time.deltaTime);
         HandleHeadBob();
+    }
+    private void HandleStepSounds()
+    {
+        footstepTimer -= Time.deltaTime;
+        if (!characterController.isGrounded || footstepTimer > 0f)
+        {
+            return;
+        }
+        float movingSpeed = characterController.velocity.sqrMagnitude;
+        if (movingSpeed <= 0.1f)
+        {
+            return;
+        }    
+        int index = Random.Range(0, footstepClips.Length);
+        footstepAudioSource.pitch = Random.Range(0.9f, 1.1f);
+        footstepAudioSource.PlayOneShot(footstepClips[index]);
+        footstepTimer = IsSprinting() ? sprintStepInterval : walkStepInterval;
     }
     private void HandleHeadBob()
     {

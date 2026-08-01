@@ -28,15 +28,16 @@ public class WeaponManager : MonoBehaviour
     [SerializeField] private int rifleMaxAmmo = 15;
     [SerializeField] private int pistolMaxAmmo = 8;
     // current magazine amount
-    private int rifleCurrentAmmo = 15;
+    private int rifleCurrentAmmo = 0;
     private int pistolCurrentAmmo = 8;
     // bullets that player carries (pistol is unlimited)
-    public int rifleAvailableAmmo { get; private set; } = 40;
+    public int rifleAvailableAmmo { get; private set; } = 0;
 
     [SerializeField] private float pistolCooldown = 0.3f;
     [SerializeField] private float rifleCooldown = 0.12f;
     [SerializeField] private float pistolRecoilMultiplier = 2f;
     [SerializeField] private float rifleRecoilMultiplier = 1f;
+    private bool hasRifle = false;
 
     [Header("Aduio")]
     [SerializeField] private AudioSource shootAudio;
@@ -51,7 +52,7 @@ public class WeaponManager : MonoBehaviour
     [SerializeField] private AudioClip pistolEquip;
 
     private float currentCooldown = 0f;
-    public WeaponType currentWeapon { get; private set; } = WeaponType.Rifle;
+    public WeaponType currentWeapon { get; private set; } = WeaponType.Pistol;
     private bool isInteracting;
     private bool isUnequiping = false;
 
@@ -59,11 +60,16 @@ public class WeaponManager : MonoBehaviour
     {
         animator = GetComponent<Animator>();
     }
+    private void Start()
+    {
+        UI.Instance.SetAmmoText(pistolCurrentAmmo, pistolMaxAmmo, -1);
+        //UI.Instance.SetAmmoText(rifleCurrentAmmo, rifleMaxAmmo, rifleAvailableAmmo);
+    }
     private void Update()
     {
         isInteracting = animator.GetCurrentAnimatorStateInfo(0).IsTag("interact");
     
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha1) && hasRifle)
         {
             UnequipPistol(); // rifle
         }
@@ -101,6 +107,19 @@ public class WeaponManager : MonoBehaviour
         shootAudio.PlayOneShot(emptyFire);
         currentCooldown = pistolCooldown;
         return false;
+    }
+    public void CollectRifle()
+    {
+        rifleCurrentAmmo = rifleMaxAmmo;
+        if (!hasRifle)
+        {
+            hasRifle = true;
+            UnequipPistol();
+        }
+        if (currentWeapon == WeaponType.Rifle)
+        {
+            UI.Instance.SetAmmoText(rifleCurrentAmmo, rifleMaxAmmo, rifleAvailableAmmo);
+        }
     }
     public void Reload()
     {

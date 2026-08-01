@@ -4,6 +4,9 @@ public class Door : MonoBehaviour, IInteractable
 {
     [field: SerializeField] public bool isInteractable { get; set; } = true; // if false then use PC
     [field: SerializeField] public AudioClip interactSound { get; set; }
+    [field: SerializeField] public AudioClip nonInteractableSound { get; set; }
+    [field: SerializeField] public string interactText { get; set; } = "Open";
+    [field: SerializeField] public string nonInteractableText { get; set; } = "Locked";
 
     [SerializeField] private GameObject offCube;
     [SerializeField] private GameObject onCube;
@@ -34,5 +37,7 @@ public class Door : MonoBehaviour, IInteractable
         }*/
         animator.SetTrigger("Open");
         isInteractable = false;
+        this.enabled = false;
+        GetComponent<BoxCollider>().enabled = false;
     }
 }

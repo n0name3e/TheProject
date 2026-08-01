@@ -30,6 +30,19 @@ public class PlayerHealth : MonoBehaviour
     }
     private void Start()
     {
+
+        if (GameDifficulty.difficulty == DifficultyLevel.Easy)
+        {
+            immunityTime = 1.5f;
+        }
+        else if (GameDifficulty.difficulty == DifficultyLevel.Medium)
+        {
+            immunityTime = 1f;
+        }
+        else if (GameDifficulty.difficulty == DifficultyLevel.Hard)
+        {
+            immunityTime = 2f / 3f;
+        }
         health = maxHealth;
         UI.Instance.SetHealth(health, maxHealth);
     }
@@ -77,6 +90,7 @@ public class PlayerHealth : MonoBehaviour
 
         if (health <= 0)
         {
+            UI.Instance.Death();
             normalHands.SetActive(false);
             Camera.main.transform.SetParent(null);
             Camera.main.GetComponent<AudioSource>().PlayOneShot(hitSound);

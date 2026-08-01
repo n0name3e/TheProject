@@ -6,26 +6,35 @@ using System.Text;
 using TMPro;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger; // Ok
+using static UnityEngine.Rendering.DebugUI;
 using static UnityEngine.Rendering.DebugUI.Table; // OK
 
 public class CMD : MonoBehaviour
 {
     public Database Database;
-    private List<Table> tables;
+    private List<Table> tables = new List<Table>();
 
     [SerializeField] private TMP_Dropdown columnChoice;
     [SerializeField] private TMP_Dropdown tableChoice;
     [SerializeField] private TMP_Text outputText;
+    [SerializeField] private AudioClip enter;
+
+    private AudioSource audioSource;
 
     private int currentTableIndex = 0;
-    
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         tables = Database.tables;
-
+        foreach (Table table in tables)
+        {
+            table.RandomizePasswords();
+        }
         AppendTablesDropdown();
+
+        audioSource = UI.Instance.monitorAudio;
     }
 
     // Update is called once per frame
@@ -38,8 +47,8 @@ public class CMD : MonoBehaviour
         }*/
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            print(tableChoice.options[tableChoice.value].ToString().ToLower());
-            print("output begin return");
+            //print(tableChoice.options[tableChoice.value].ToString().ToLower());
+            //print("output begin return");
             StartCoroutine(OutputEverything(tableChoice.options[tableChoice.value].text));
         }
     }
@@ -57,7 +66,7 @@ public class CMD : MonoBehaviour
     {
         currentTableIndex = index;
         AppendColumnDropdown();
-        print("set active");
+        StartCoroutine(OutputEverything(tableChoice.options[tableChoice.value].text));
     }
     private void AppendColumnDropdown()
     {
@@ -72,6 +81,7 @@ public class CMD : MonoBehaviour
     }
     public IEnumerator OutputEverything(string tableName)
     {
+        audioSource.PlayOneShot(enter);
         foreach (Table table in tables)
         {
             if (table.tableName.ToLower() == tableName.ToLower())
@@ -108,8 +118,8 @@ public class CMD : MonoBehaviour
 
                 //print(tableOutput.ToMinimalString());
                 //outputText.text = output.ToString();
-                outputText.text = tableOutput.ToString() + "\n\n" +
-                    $"{table.data[0].rows.Count} rows selected in {Time.unscaledTime - t} seconds";
+                outputText.text = tableOutput.ToString() + "\n" +
+                    $"{table.data[0].rows.Count.ToString()} rows selected in {(Time.unscaledTime - t).ToString()} seconds";
                 outputText.rectTransform.sizeDelta = new Vector2(outputText.preferredWidth, outputText.preferredHeight);
                 yield break;
                 // return;

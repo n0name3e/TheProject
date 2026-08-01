@@ -1,7 +1,9 @@
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class Bullet : MonoBehaviour
 {
+    public IObjectPool<Bullet> pool;
     private float Speed;
     private Vector3 Direction;
     public bool destroyOnHit = true;
@@ -13,9 +15,10 @@ public class Bullet : MonoBehaviour
         time -= Time.deltaTime;
         if (time <= 0)
         {
-            if (destroyOnHit)
+            if (destroyOnHit && gameObject.activeInHierarchy)
             {
-                Destroy(gameObject);
+                pool?.Release(this);
+                //Destroy(gameObject);
             }
             else
             {
@@ -39,6 +42,15 @@ public class Bullet : MonoBehaviour
         {
             player.Hit(transform);
         }
+        if (collision.transform.TryGetComponent(out BreakablePallet breakable))
+        {
+            breakable.Hit(1);
+        }
+        if (collision.transform.TryGetComponent(out Barrel barrel))
+        {
+            if (barrel.isBreakableByEnemies)
+                barrel.Explode();
+        }
         /*if (collision.transform.TryGetComponent(out BreakablePallet pallet))
         {
             pallet.Destroy();
@@ -48,9 +60,10 @@ public class Bullet : MonoBehaviour
         {
             return;
         }
-        if (destroyOnHit)
+        if (destroyOnHit && gameObject.activeInHierarchy)
         {
-            Destroy(gameObject);
+            pool?.Release(this);
+            //Destroy(gameObject);
         }
         else
         {

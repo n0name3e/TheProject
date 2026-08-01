@@ -9,6 +9,10 @@ public class BossDoor : MonoBehaviour, IInteractable
     //[SerializeField] private Transform tpPosition;
     [SerializeField] private PlayableDirector cutscene;
     [field: SerializeField] public AudioClip interactSound { get; set; }
+    [field: SerializeField] public AudioClip nonInteractableSound { get; set; }
+    [field: SerializeField] public string interactText { get; set; }
+    [field: SerializeField] public string nonInteractableText { get; set; }
+
 
     //private PlayerMovement playerMovement;
     //[SerializeField] private BossAI bossToActivate;
@@ -33,5 +37,6 @@ public class BossDoor : MonoBehaviour, IInteractable
                 Destroy(EnemyAI.AllActiveEnemies[i].gameObject);
             }
         }
+        isInteractable = false;
     }
 }

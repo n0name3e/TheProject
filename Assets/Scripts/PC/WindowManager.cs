@@ -4,13 +4,24 @@ public class WindowManager : MonoBehaviour
 {
     public GameObject currentActiveWindow { get; private set; }
 
+    [SerializeField] private AudioClip windowSound;
+
+    private AudioSource audioSource;
+
+    private void Start()
+    {
+        audioSource = UI.Instance.monitorAudio;
+    }
+
     public void OpenTheWindow(GameObject window)
     {
+        audioSource.PlayOneShot(windowSound);
         currentActiveWindow?.SetActive(false);
         window.SetActive(true);
         currentActiveWindow = window;
     }
     public void CloseCurrentWindow() {
+        audioSource.PlayOneShot(windowSound);
         currentActiveWindow.SetActive(false);
         currentActiveWindow = null;
     }
@@ -24,6 +35,7 @@ public class WindowManager : MonoBehaviour
             }
             else
             {
+                audioSource.PlayOneShot(windowSound);
                 UI.Instance.DisablePC();
             }
         }

@@ -4,6 +4,11 @@ public class CollectibleAmmo : MonoBehaviour, IInteractable
 {
     public bool isInteractable { get; set; } = true;
     [field: SerializeField] public AudioClip interactSound { get; set; }
+    [field: SerializeField] public AudioClip nonInteractableSound { get; set; }
+    [field: SerializeField] public string interactText { get; set; } = "Collect";
+    [field: SerializeField] public string nonInteractableText { get; set; }
+    [SerializeField] private bool reduceAmmoInHard = true;
+    [SerializeField] private bool isRifle = false; // if so player will get rifle 
 
     public bool isRotating = true;
     public bool isDestroying = true; // if not then some object will be removed (like remove magazine from rifle)
@@ -34,7 +39,18 @@ public class CollectibleAmmo : MonoBehaviour, IInteractable
     public void Interact()
     {
         int ammoAmount = Random.Range(minAmmoAmount, maxAmmoAmount + 1);
-        FindAnyObjectByType<WeaponManager>().CollectAmmo(ammoAmount);
+        if (reduceAmmoInHard && GameDifficulty.difficulty == DifficultyLevel.Hard)
+        {
+            ammoAmount = Mathf.CeilToInt((float)ammoAmount * 0.85f);
+        }
+        if (isRifle)
+        {
+            FindAnyObjectByType<WeaponManager>().CollectRifle();
+        }
+        else
+        {
+            FindAnyObjectByType<WeaponManager>().CollectAmmo(ammoAmount);
+        }
         if (isDestroying)
         {
             Destroy(gameObject);

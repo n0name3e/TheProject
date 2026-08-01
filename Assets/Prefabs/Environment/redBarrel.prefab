@@ -139,7 +139,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 3b8acac27c6aa35489f673bd5bf60b1e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.4345474
+      value: 17.434547
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3b8acac27c6aa35489f673bd5bf60b1e, type: 3}
       propertyPath: m_LocalPosition.y
@@ -147,7 +147,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3b8acac27c6aa35489f673bd5bf60b1e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.108452
+      value: 23.358452
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3b8acac27c6aa35489f673bd5bf60b1e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -176,6 +176,10 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 3b8acac27c6aa35489f673bd5bf60b1e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7635826562936255635, guid: 3b8acac27c6aa35489f673bd5bf60b1e, type: 3}
+      propertyPath: m_ScaleInLightmap
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 3b8acac27c6aa35489f673bd5bf60b1e, type: 3}
       propertyPath: m_Name
@@ -206,6 +210,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3b8acac27c6aa35489f673bd5bf60b1e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1771573748063456290}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3b8acac27c6aa35489f673bd5bf60b1e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1637778017253143542}
   m_SourcePrefab: {fileID: 100100000, guid: 3b8acac27c6aa35489f673bd5bf60b1e, type: 3}
 --- !u!1 &2494794895755233768 stripped
 GameObject:
@@ -248,10 +255,26 @@ MonoBehaviour:
   explosionParticles: {fileID: 0}
   audioSource: {fileID: 8539202972866242715}
   explosionSound: {fileID: 8300000, guid: 5b0207f10f1c9c44d986073358c6b59e, type: 3}
-  <interactSound>k__BackingField: {fileID: 8300000, guid: 5b0207f10f1c9c44d986073358c6b59e, type: 3}
   enemyDamage: 6
   radius: 7
   canFall: 0
+  isBreakableByEnemies: 0
+--- !u!208 &1637778017253143542
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2494794895755233768}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 2, y: 2, z: 2}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 2, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!4 &3014203451749077842 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3b8acac27c6aa35489f673bd5bf60b1e, type: 3}

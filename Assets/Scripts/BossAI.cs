@@ -35,8 +35,8 @@ public class BossAI : MonoBehaviour
         if (isActive)
         {
             ChasePlayer();
+            FacePlayer();
         }
-        FacePlayer();
     }
     private void FacePlayer()
     {

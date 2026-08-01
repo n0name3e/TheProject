@@ -5,6 +5,9 @@ public class Card : MonoBehaviour, IInteractable
     public bool isInteractable { get; set; } = true;
     [SerializeField] private CardSwipe cardSwipeToActivate;
     [field: SerializeField] public AudioClip interactSound { get; set; }
+    [field: SerializeField] public AudioClip nonInteractableSound { get; set; }
+    [field: SerializeField] public string interactText { get; set; } = "Pick Up";
+    [field: SerializeField] public string nonInteractableText { get; set; }
 
 
     public float moveHeight = 0.05f;

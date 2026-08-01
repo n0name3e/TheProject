@@ -101,3 +101,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fed3558c650d20849915702f9307f47d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Card
+  cardSwipeToActivate: {fileID: 0}
+  <interactSound>k__BackingField: {fileID: 8300000, guid: 5f6332ad64529f740abbd1de343b6d0c, type: 3}
+  <nonInteractableSound>k__BackingField: {fileID: 8300000, guid: a070b1babbf335b4ebfe6393f41c2e05, type: 3}
+  <interactText>k__BackingField: Pick Up
+  <nonInteractableText>k__BackingField: 
+  moveHeight: 0.05

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3238289721813942428}
   - component: {fileID: 6684880139581909218}
   - component: {fileID: 915569345106964573}
+  - component: {fileID: 2705585732740701146}
   m_Layer: 0
   m_Name: shelve
   m_TagString: Untagged
@@ -120,6 +121,27 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.4, y: 4, z: 0.19}
   m_Center: {x: 0, y: 2, z: -1.9}
+--- !u!65 &2705585732740701146
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1399366515266910085}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.2, z: 4}
+  m_Center: {x: 0, y: 3.1, z: 0}
 --- !u!1 &1827598853987537992
 GameObject:
   m_ObjectHideFlags: 0
@@ -193,7 +215,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.4
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0

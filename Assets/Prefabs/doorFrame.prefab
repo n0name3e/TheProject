@@ -471,6 +471,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
   <isInteractable>k__BackingField: 1
+  <interactSound>k__BackingField: {fileID: 8300000, guid: 6303daf6fc4e68a4882c4751e2eb0af2, type: 3}
+  <nonInteractableSound>k__BackingField: {fileID: 8300000, guid: a070b1babbf335b4ebfe6393f41c2e05, type: 3}
+  <interactText>k__BackingField: Open
+  <nonInteractableText>k__BackingField: Locked
   offCube: {fileID: 525800637867819389}
   onCube: {fileID: 1262303603102951167}
 --- !u!65 &1008743817056234411

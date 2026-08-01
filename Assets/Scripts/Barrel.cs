@@ -8,6 +8,7 @@ public class Barrel : MonoBehaviour
     [SerializeField] private int enemyDamage = 6;
     [SerializeField] private float radius = 7f;
     [SerializeField] private bool canFall;
+    public bool isBreakableByEnemies;
     public void Explode()
     {
         if (explosionParticles == null)
@@ -27,6 +28,10 @@ public class Barrel : MonoBehaviour
             {
                 enemy.Hit(enemyDamage, true);
             }
+            if (col.TryGetComponent(out Boss boss))
+            {
+                boss.Hit(enemyDamage, true);
+            }
             if (col.TryGetComponent(out PlayerHealth player))
             {
                 Debug.DrawRay(maxPos, (player.transform.position - maxPos).normalized * radius, Color.red, 10f);
@@ -34,7 +39,6 @@ public class Barrel : MonoBehaviour
                 // need to check if it actually hits the player, because otherwise its unfair
                 if (Physics.Raycast(maxPos, player.transform.position - maxPos, out hit, radius))
                 {
-                    print(hit.collider.gameObject.name);
                     if (hit.transform == player.transform)
                     {
                         player.Hit(transform);
@@ -44,7 +48,7 @@ public class Barrel : MonoBehaviour
         }
         audioSource.transform.SetParent(null, true);
         audioSource.PlayOneShot(explosionSound);
-        Destroy(audioSource, 2f);
+        Destroy(audioSource.gameObject, 2f);
         Destroy(gameObject);
     }
     private void OnCollisionEnter(Collision collision)

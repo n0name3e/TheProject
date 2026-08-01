@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerShotting : MonoBehaviour
 {
     [SerializeField] private LayerMask shootableLayer;
-    [SerializeField] private ParticleSystem shootParticle; // wish it was Visual Effect
+    [SerializeField] private ParticleSystem shootParticle; // wish it was Visual Effect // actually particle system is fine
     [SerializeField] private WeaponManager weaponManager;
     [SerializeField] private ParticleSystem hitParticles; // when enemy is hit
     [SerializeField] private ParticleSystem environmentHitParticles; // when world object is hit
@@ -18,6 +18,8 @@ public class PlayerShotting : MonoBehaviour
 
     void Update()
     {
+        if (UI.Instance.isCutscene)
+            return;
         if (Input.GetMouseButton(0))
         {
             Shoot();
@@ -33,29 +35,28 @@ public class PlayerShotting : MonoBehaviour
         if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, 100f, shootableLayer))
         {
             Transform hitObject = hit.transform;
-            print("hit: " + hitObject.name);
             if (hitObject.TryGetComponent(out Enemy enemy))
             {
-                print("hit");
                 enemy.Hit();
                 hitParticles.transform.position = hit.point;
                 hitParticles.Emit(15);
+                StatsManager.Instance.hits++;
                 return;
             }
             if (hitObject.GetComponentInChildren<Enemy>())
             {
                 enemy = hitObject.GetComponentInChildren<Enemy>();
-                print("hit");
                 enemy.Hit();
                 hitParticles.transform.position = hit.point;
                 hitParticles.Emit(15);
+                StatsManager.Instance.hits++;
             }
             if (hitObject.TryGetComponent(out Boss boss))
             {
-                print("hit boss");
                 boss.Hit();
                 hitParticles.transform.position = hit.point;
                 hitParticles.Emit(15);
+                StatsManager.Instance.hits++;
                 return;
             }
             if (hitObject.TryGetComponent(out Barrel barrel))
@@ -66,7 +67,11 @@ public class PlayerShotting : MonoBehaviour
             }
             if (hitObject.TryGetComponent(out BreakablePallet pallet))
             {
-                pallet.Destroy();
+                pallet.Hit(3);
+            }
+            if (hitObject.TryGetComponent(out MonitorObject monitor))
+            {
+                monitor.TakeDamage();
             }
             environmentHitParticles.transform.position = hit.point;
             environmentHitParticles.Emit(15);

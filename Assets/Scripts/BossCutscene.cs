@@ -9,6 +9,7 @@ public class BossCutscene : MonoBehaviour
     [SerializeField] private BossAI bossToActivate;
     [SerializeField] private PlayableDirector cutscene;
     [SerializeField] private Image blackBackground;
+    [SerializeField] private AudioSource music;
     private CharacterController player;
 
     private void Start()
@@ -64,7 +65,6 @@ public class BossCutscene : MonoBehaviour
     // called at the last frame of the cutscene timeline
     public void FinishCutscene()
     {
-        print("fisihn");
         cutscene.Pause();
         StartCoroutine(CutsceneFinish());
     }
@@ -77,7 +77,9 @@ public class BossCutscene : MonoBehaviour
         player.enabled = false;
         player.transform.position = tpPosition.position;
         player.enabled = true;
+        UI.Instance.ActivateBossHealth(true);
         UI.Instance.isCutscene = false;
         bossToActivate.ActivateBoss();
+        music.Play();
     }
 }

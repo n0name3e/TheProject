@@ -92,7 +92,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bdfbe8a887d1b94eb90ff935c061528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
-  isRanged: 1
   detectionRange: 10
   validLayers:
     serializedVersion: 2
@@ -103,6 +102,7 @@ MonoBehaviour:
   isChasing: 0
   agent: {fileID: 3247058738035342846}
   enemy: {fileID: 2654591772572038441}
+  visionCheckInterval: 0.25
 --- !u!1 &7071130047215891404
 GameObject:
   m_ObjectHideFlags: 0
@@ -144,10 +144,10 @@ AudioSource:
   m_GameObject: {fileID: 7071130047215891404}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 8619355570696429974, guid: 74aedfa1abeed044fa7a1bfa83aa08f3, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 0.892
   m_Pitch: 1
   Loop: 0
@@ -410,7 +410,7 @@ PrefabInstance:
     - target: {fileID: 6156133286819524915, guid: c8a1b218158d5dc4c8e557715e326986, type: 3}
       propertyPath: hitSound
       value: 
-      objectReference: {fileID: 8300000, guid: 9b0a81194217fce4e9e34eecbbad0085, type: 3}
+      objectReference: {fileID: 8300000, guid: f7298861f4cbc2345a02bf8a6ffc8f95, type: 3}
     - target: {fileID: 6156133286819524915, guid: c8a1b218158d5dc4c8e557715e326986, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -444,9 +444,41 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4188006273923181135}
     - target: {fileID: 6156133286819524915, guid: c8a1b218158d5dc4c8e557715e326986, type: 3}
+      propertyPath: footstepInterval
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6156133286819524915, guid: c8a1b218158d5dc4c8e557715e326986, type: 3}
       propertyPath: inaccuracyMultiplier
       value: 0.66
       objectReference: {fileID: 0}
+    - target: {fileID: 6156133286819524915, guid: c8a1b218158d5dc4c8e557715e326986, type: 3}
+      propertyPath: footstepClips.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6156133286819524915, guid: c8a1b218158d5dc4c8e557715e326986, type: 3}
+      propertyPath: 'footstepClips.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 207c6b33edaf40745a766e03548cbee4, type: 3}
+    - target: {fileID: 6156133286819524915, guid: c8a1b218158d5dc4c8e557715e326986, type: 3}
+      propertyPath: 'footstepClips.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: b683dafe3bfe4aa48b85ceb4bf474495, type: 3}
+    - target: {fileID: 6156133286819524915, guid: c8a1b218158d5dc4c8e557715e326986, type: 3}
+      propertyPath: 'footstepClips.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: c2cae64cba2d5624eb328ab0980c6ea0, type: 3}
+    - target: {fileID: 6156133286819524915, guid: c8a1b218158d5dc4c8e557715e326986, type: 3}
+      propertyPath: 'footstepClips.Array.data[3]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 51ddeb150933ede469cf4edc5a49ee38, type: 3}
+    - target: {fileID: 6156133286819524915, guid: c8a1b218158d5dc4c8e557715e326986, type: 3}
+      propertyPath: 'footstepClips.Array.data[4]'
+      value: 
+      objectReference: {fileID: 8300000, guid: cf5ff272918b9c745ac36380d02e4e20, type: 3}
+    - target: {fileID: 6156133286819524915, guid: c8a1b218158d5dc4c8e557715e326986, type: 3}
+      propertyPath: 'footstepClips.Array.data[5]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 95bc19d089ec8ea41b2b14ffed05049b, type: 3}
     - target: {fileID: 7321506850298792406, guid: c8a1b218158d5dc4c8e557715e326986, type: 3}
       propertyPath: m_Layer
       value: 7

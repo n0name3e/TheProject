@@ -9,15 +9,33 @@ public class UI : MonoBehaviour
     [SerializeField] private Image health;
     [SerializeField] private GameObject PC;
     [SerializeField] private GameObject interactableStuff;
+    [SerializeField] private TMP_Text interactText;
+    [SerializeField] private Image interactImage;
 
     [SerializeField] private Image damageOverlay;
     [SerializeField] private TMP_Text currentAmmoText;
     [SerializeField] private TMP_Text availableAmmoText;
     [SerializeField] private GameObject HUD;
+    [SerializeField] private GameObject victoryScreen;
+    [SerializeField] private GameObject bossHealth;
+    [SerializeField] private Image bossHealthBar;
+    [SerializeField] private Image yellowBossBar;
+    [SerializeField] private AudioSource bossMusic;
+    [SerializeField] private Transform deathScreen;
+    private float yellowBossBarTimer = 0f;
+    private float yellowBossBarValue = 1f;
+    private float bossHealthValue = 1f;
+    private float deathBossTimer = 3f;
+    private float deathTimer = 0f;
+    private bool isDead = false;
     public bool isBoss = false;
     public ParticleSystem explosionParticles; // why not
     public bool isCutscene = false;
     private int whiteHeartEnabled = 0;
+    public AudioSource monitorAudio;
+    [SerializeField] private AudioSource eventSource;
+    [SerializeField] private AudioClip victorySound;
+    [SerializeField] private AudioClip defeatSound;
 
     private void Awake()
     {
@@ -36,10 +54,37 @@ public class UI : MonoBehaviour
     }
     private void Update()
     {
-        if (damageOverlay.color.a > 0) {
+        if (damageOverlay.color.a > 0 && !isDead) {
             Color c = damageOverlay.color;
             c.a = Mathf.MoveTowards(c.a, 0f, Time.deltaTime / 2f);
             damageOverlay.color = c;
+        }
+        if (yellowBossBarTimer > 0)
+        {
+            yellowBossBarTimer -= Time.deltaTime;
+        }
+        else
+        {
+            SetYellowBossBar(bossHealthValue);
+        }
+        if (bossHealthValue <= 0f && isBoss)
+        {
+            deathBossTimer -= Time.deltaTime;
+            if (deathBossTimer <= 0f)
+            {
+                ActivateBossHealth(false);
+                isBoss = false;
+                StartCoroutine(FadeOutMusic());
+            }
+        }
+        if (isDead)
+        {
+            deathTimer -= Time.deltaTime;
+            if (deathTimer <= 0f)
+            {
+                ShowDeathScreen();
+                isDead = false;
+            }
         }
     }
     public void SetHealth(float current, float max)
@@ -88,9 +133,40 @@ public class UI : MonoBehaviour
         health.material.SetFloat("_whiteHeart", 1);
         whiteHeartEnabled = 1;
     }
-    public void ToggleInteractableStuff(bool enable)
+    public void ToggleInteractableStuff(IInteractable interactable)
     {
-        interactableStuff.SetActive(enable);
+        if (interactable == null)
+        {
+            interactableStuff.SetActive(false);
+            return;
+        }
+        interactableStuff.SetActive(true);
+        if (interactable.isInteractable)
+        {
+            if (interactable.interactText == "")
+            {
+                interactText.text = "Interact";
+
+            }
+            else
+            {
+                interactText.text = interactable.interactText;
+            }
+            interactImage.color = new Color(1, 1, 1, 1);
+        }
+        else
+        {
+            if (interactable.nonInteractableText.Trim() == "")
+            {
+                interactableStuff.SetActive(false);
+            }
+            else
+            {
+                interactText.text = interactable.nonInteractableText;
+                interactImage.color = new Color(1, 1, 1, 0.3f);
+            }
+
+        }
     }
     /// <summary>
     /// 
@@ -100,7 +176,7 @@ public class UI : MonoBehaviour
     /// <param name="available">total ammo left in player's inventory. Put -1 here if pistol with unlimited ammo</param>
     public void SetAmmoText(int current, int max, int available)
     {
-        currentAmmoText.text = $"{current} / {max}";
+        currentAmmoText.text = $"{current.ToString()} / {max.ToString()}";
         
         if (available == -1)
         {
@@ -110,5 +186,75 @@ public class UI : MonoBehaviour
         {
             availableAmmoText.text = available.ToString();
         }
+    }
+    public void ShowVictoryScreen()
+    {
+        victoryScreen.SetActive(true);
+        Time.timeScale = 0;
+        Cursor.lockState = CursorLockMode.None;
+        eventSource.PlayOneShot(victorySound);
+    }
+    public void ActivateBossHealth(bool activate)
+    {
+        bossHealth.SetActive(activate);
+    }
+    public void SetBossHealth(float current, float max)
+    {
+        bossHealthBar.fillAmount = current / max;
+        yellowBossBarTimer = 1f;
+        bossHealthValue = current / max;
+    }
+    private void SetYellowBossBar(float value)
+    {
+        if (yellowBossBarTimer <= 0)
+        {
+            yellowBossBarValue = Mathf.Max(yellowBossBarValue - (0.75f * Time.deltaTime), value);
+            yellowBossBar.fillAmount = yellowBossBarValue;
+        }
+    }
+    private IEnumerator FadeOutMusic()
+    {
+        while (bossMusic.volume > 0)
+        {
+            bossMusic.volume -= Time.unscaledDeltaTime / 3f;
+            yield return null;
+        }
+        bossMusic.Stop();
+    }
+    public void Death()
+    {
+        if (!Settings.DeathCamera)
+        {
+            deathTimer = 0.1f;
+        }
+        else
+        {
+            deathTimer = 5f;
+        }
+        isDead = true;
+        StartCoroutine(FadeOutMusic());
+    }
+    private void ShowDeathScreen()
+    {
+        deathScreen.gameObject.SetActive(true);
+        Time.timeScale = 0;
+        Cursor.lockState = CursorLockMode.None;
+        eventSource.PlayOneShot(defeatSound);
+        DisableHUD();
+    }
+    public void Restart()
+    {
+        Time.timeScale = 1f;
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+    }
+    public void MainMenu()
+    {
+        Time.timeScale = 1f;
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+    }
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetStatic()
+    {
+        Instance = null;
     }
 }

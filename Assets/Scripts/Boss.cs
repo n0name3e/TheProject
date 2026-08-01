@@ -14,7 +14,6 @@ public class Boss : MonoBehaviour
     [SerializeField] private float movementSpeed = 3.75f;
     [Space(5)]
     //[SerializeField] private float attackRange = 5f;
-    [SerializeField] private float attackCooldown = 4f;
     [SerializeField] private float bulletSpeed = 10f;
     [SerializeField] private float inaccuracyMultiplier = 1f; // less is more accurate
     [Space(5)]
@@ -27,15 +26,28 @@ public class Boss : MonoBehaviour
     [SerializeField] private GameObject grenadePrefab;
     [SerializeField] private LayerMask validLayers;
     [SerializeField] private Transform eyePosition;
+    [SerializeField] private GameObject keyHatch;
     [SerializeField] private List<EnemyAI> skeletons = new List<EnemyAI>();
-    private List<GameObject> bulletPool = new List<GameObject>();
-
+    private BulletPoolManager bulletPoolManager;
     public float attackTimer { get; private set; } = 0f;
     public float idleTimer { get; private set; } = 0f; // when boss does'nt attack but move
 
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private ParticleSystem shootParticles;
     [SerializeField] private ParticleSystem hitParticle;
+
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip summonSkeletonSound;
+    [SerializeField] private AudioClip shootSound;
+    [SerializeField] private AudioClip grenadeThrowSound;
+    [SerializeField] private AudioClip meleeAttackSound;
+    [SerializeField] private AudioClip hitSound;
+
+    [SerializeField] private AudioClip[] footstepClips;
+    [SerializeField] private float footstepInterval = 0.8f;
+    private float footstepTimer = 0f;
+    private int minigunBullets = 20;
+    private float distance = 0f;
     private void Awake()
     {
         //agent = GetComponentInParent<NavMeshAgent>();
@@ -44,18 +56,28 @@ public class Boss : MonoBehaviour
     }
     void Start()
     {
+        if (GameDifficulty.difficulty == DifficultyLevel.Easy)
+        {
+            MaxHealth = 45f;
+            minigunBullets = 15;
+        }
+        else if (GameDifficulty.difficulty == DifficultyLevel.Medium)
+        {
+            MaxHealth = 60f;
+            minigunBullets = 20;
+        }
+        else if (GameDifficulty.difficulty == DifficultyLevel.Hard)
+        {
+            MaxHealth = 66f;
+            minigunBullets = 30;
+        }
         Health = MaxHealth;
         agent.speed = movementSpeed;
         if (player == null)
         {
             player = FindAnyObjectByType<PlayerMovement>().transform;
         }
-        for (int i = 0; i < 30; i++)
-        {
-            GameObject b = Instantiate(bulletPrefab);
-            b.SetActive(false);
-            bulletPool.Add(b);
-        }
+        bulletPoolManager = BulletPoolManager.Instance;
     }
 
     // Update is called once per frame
@@ -63,8 +85,10 @@ public class Boss : MonoBehaviour
     {
         if (player == null) // player died
             return;
+        distance = Vector3.Distance(player.position, transform.position);
         idleTimer -= Time.deltaTime;
         attackTimer -= Time.deltaTime;
+        HandleStepSounds();
         /*if (Vector3.Distance(player.position, transform.position) <= attackRange)
         {
             agent.isStopped = true;
@@ -82,9 +106,31 @@ public class Boss : MonoBehaviour
             }
         }*/
     }
+    private void HandleStepSounds()
+    {
+        footstepTimer -= Time.deltaTime;
+        if (footstepTimer > 0f || footstepClips.Length == 0) // for snipers
+        {
+            return;
+        }
+        float movingSpeed = agent.velocity.sqrMagnitude;
+        if (movingSpeed <= 0.1f)
+        {
+            return;
+        }
+        int index = Random.Range(0, footstepClips.Length);
+        audioSource.pitch = Random.Range(0.85f, 1.15f);
+        audioSource.PlayOneShot(footstepClips[index]);
+        footstepTimer = footstepInterval;
+    }
     public void Hit(int damage = 1, bool useParticles = false)
     {
         Health -= damage;
+        UI.Instance.SetBossHealth(Health, MaxHealth);
+        if (hitSound != null)
+        {
+            audioSource.PlayOneShot(hitSound);
+        }
         if (useParticles && hitParticle != null)
         {
             hitParticle.transform.position = transform.position;
@@ -92,7 +138,10 @@ public class Boss : MonoBehaviour
         }
         if (Health <= 0)
         {
-            Destroy(gameObject);
+            keyHatch.transform.SetParent(null, true);
+            keyHatch.SetActive(true);
+            StatsManager.Instance.kills++;
+            Destroy(transform.parent.gameObject);
         }
     }
     public void Attack()
@@ -104,7 +153,7 @@ public class Boss : MonoBehaviour
         //attackTimer = attackCooldown;
         // attacks
         float random = Random.Range(0, 100);
-        if (Vector3.Distance(player.position, transform.position) <= 3f && random >= 10)
+        if (distance <= 3f && random >= 10)
         {
             MeleeAttack();
             return;
@@ -112,14 +161,13 @@ public class Boss : MonoBehaviour
 
         if (random < 20 && skeletons.Count > 0)
         {
-            print("skeleon");
             SummonSkeleton();
         }
-        else if (random < 60 && CanSeePlayer())
+        else if (random < 60 && (CanSeePlayer() || random < 30))
         {
             StartCoroutine(MinigunBarrage());
         }
-        else if (random < 80)
+        else if (random < 80 || (distance <= 5f && random < 40))
         {
             GrenadeThrow();
         }
@@ -138,45 +186,68 @@ public class Boss : MonoBehaviour
         {
             animator.Play(MinigunThrustHash);
         }
+        audioSource.PlayOneShot(meleeAttackSound);
+        if (GameDifficulty.difficulty == DifficultyLevel.Hard)
+        {
+            idleTimer = 1.5f;
+            attackTimer = 2f;
+        }
+        else { 
         idleTimer = 2f;
         attackTimer = 3f;
     }
+    }
     private IEnumerator MinigunBarrage()
     {
-        print("minigun barrage");
         attackTimer = 5f; // just in case some attack would like to interfere
         idleTimer = 5f;
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < minigunBullets; i++)
         {
             if (Health <= 0)
                 break;
             RangedAttack();
             yield return new WaitForSeconds(0.1f);
         }
+        if (GameDifficulty.difficulty == DifficultyLevel.Hard)
+        {
+            idleTimer = 1f;
+            attackTimer = 1.25f;
+        }
+        else { 
         idleTimer = 2f;
         attackTimer = 4f; // actual no-attack time
     }
-    private GameObject GetBulletFromPool()
-    {
-        foreach (GameObject b in bulletPool)
-        {
-            if (!b.activeInHierarchy)
-            {
-                return b;
-            }
-        }
-        return null; 
     }
     private void GrenadeThrow()
     {
         Vector3 direction = (player.position - transform.position).normalized;
-        direction += Vector3.up;
+        if (distance <= 5f)
+        {
+            direction += Vector3.up / 2;
+        }
+        else
+        {
+            direction += Vector3.up;
+        }
 
         GameObject grenade = Instantiate(grenadePrefab, shootPosition.position, Quaternion.identity);
         grenade.GetComponent<Rigidbody>().AddForce(20 * direction, ForceMode.Impulse);
 
-        idleTimer = 1f;
-        attackTimer = 3f;
+        audioSource.PlayOneShot(grenadeThrowSound);
+        if (GameDifficulty.difficulty == DifficultyLevel.Hard)
+        {
+            idleTimer = 1f;
+            if (distance <= 5f)
+                attackTimer = 1.5f;
+            else
+                attackTimer = 2.5f;
+
+        }
+        else
+        {
+            idleTimer = 1f;
+            attackTimer = 3f;
+        }
     }
     private void SummonSkeleton()
     {
@@ -199,8 +270,17 @@ public class Boss : MonoBehaviour
             currentSkeleton.gameObject.SetActive(true);
             currentSkeleton.ActivateChasing();
             skeletons.Remove(currentSkeleton);
-            idleTimer = 1f;
-            attackTimer = 3f;
+            audioSource.PlayOneShot(summonSkeletonSound);
+            if (GameDifficulty.difficulty == DifficultyLevel.Hard)
+            {
+                idleTimer = 1f;
+                attackTimer = 2f;
+            }
+            else
+            {
+                idleTimer = 1f;
+                attackTimer = 3f;
+            }
         }
         else
         {
@@ -211,10 +291,11 @@ public class Boss : MonoBehaviour
     private void RangedAttack()
     {
         shootParticles.Play();
-        GameObject bulletObject = GetBulletFromPool();
-        if (bulletObject == null)
-            return;
+        //GameObject bulletObject = GetBulletFromPool();
+        //if (bulletObject == null)
+        //    return;
         //GameObject bulletObject = Instantiate(bulletPrefab, shootPosition.position, transform.rotation);
+        Bullet bulletObject = bulletPoolManager.GetBullet();
         bulletObject.transform.position = shootPosition.position;
 
         Vector3 direction = (player.position - transform.position).normalized;
@@ -224,9 +305,9 @@ public class Boss : MonoBehaviour
         bulletObject.transform.rotation = Quaternion.LookRotation(direction);
         bulletObject.transform.Rotate(90, 0, 0);
         Bullet bullet = bulletObject.GetComponent<Bullet>();
-        bullet.destroyOnHit = false;
-        bulletObject.SetActive(true);
         bullet.Launch(bulletSpeed, direction.normalized);
+
+        audioSource.PlayOneShot(shootSound);
 
         //Destroy(bulletObject, 3f);
     }

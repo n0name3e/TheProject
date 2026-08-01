@@ -16,10 +16,17 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float returnSpeed;
     private Vector3 targetRecoilRotation = Vector3.zero;
     private Vector3 recoilRotation = Vector3.zero;
+    private float y = -1;
 
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        Camera.main.fieldOfView = Settings.FOV;
+        sensitivity = Settings.Sensitivity;
+        if (Settings.InvertY)
+        {
+            y = 1;
+        }
     }
 
     void Update()
@@ -36,7 +43,7 @@ public class CameraController : MonoBehaviour
         targetRecoilRotation = Vector3.Lerp(targetRecoilRotation, Vector3.zero, returnSpeed * Time.deltaTime);
         recoilRotation = Vector3.Slerp(recoilRotation, targetRecoilRotation, snappiness * Time.deltaTime);
         player.localRotation = Quaternion.Euler(0, rotation.x, 0);
-        transform.localRotation = Quaternion.Euler(new Vector3(-rotation.y, 0, 0) + recoilRotation);
+        transform.localRotation = Quaternion.Euler(new Vector3(rotation.y * y, 0, 0) + recoilRotation);
     }
     public void TriggerRecoil(float recoilMultiplier)
     {

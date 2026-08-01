@@ -11,5 +11,6 @@ public class ServerRoomBreaker : MonoBehaviour
         lighting.intensity = 120f;
         lighting.range = 30f;
         sparksParticles.Play();
+        GetComponent<AudioSource>().Play();
     }
 }

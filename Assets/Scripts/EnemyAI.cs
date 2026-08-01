@@ -4,7 +4,6 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
-    [SerializeField] private bool isRanged = true;
     [SerializeField] private float detectionRange = 10f;
     [SerializeField] private LayerMask validLayers;
     private float attackRange = 5f;
@@ -14,11 +13,15 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private Transform startingDestination;
     [SerializeField] private Transform eyePosition;
 
-    [SerializeField] private bool isChasing = false;
+    public bool isChasing = false;
     private bool hasGotToStartingDestionation = false;
 
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private Enemy enemy;
+
+    [SerializeField] private float visionCheckInterval = 0.25f;
+    private float visionTimer = 0f;
+    private float moveTimer = 0f;
 
     public static List<EnemyAI> AllActiveEnemies = new List<EnemyAI>();
 
@@ -83,17 +86,26 @@ public class EnemyAI : MonoBehaviour
     }
     private void CheckPlayer()
     {
-        //print(gameObject.name + " Checking");
-        if (CanSeePlayer())
+        visionTimer -= Time.deltaTime;
+        if (visionTimer <= 0f)
         {
-            isChasing = true;
-            hasGotToStartingDestionation = true; // if enemy already can see player there are no need for scripted things
+            visionTimer = visionCheckInterval; 
+
+            if (CanSeePlayer())
+            {
+                isChasing = true;
+                hasGotToStartingDestionation = true;
+            }
         }
     }
     private bool CanSeePlayer()
     {
+        if (Vector3.Distance(transform.position, player.position) > detectionRange)
+        {
+            return false;
+        }
         RaycastHit hit;
-        Debug.DrawRay(eyePosition.position, ((player.position - new Vector3(0, 0, 0)) - transform.position) * 75, Color.red, 0.25f);
+        Debug.DrawRay(eyePosition.position, ((player.position - new Vector3(0, 0, 0)) - transform.position).normalized * 75, Color.red, 0.25f);
         if (Physics.Raycast(eyePosition.position, (player.position - new Vector3(0, 0, 0)) - transform.position, out hit, detectionRange, validLayers))
         {
             //print(gameObject.name + ": " + hit.transform.name);
@@ -106,6 +118,7 @@ public class EnemyAI : MonoBehaviour
     }
     private void ChasePlayer()
     {
+
         if (Vector3.Distance(player.position + new Vector3(0, 1, 0), transform.position) <= attackRange)
         {
             if (CanSeePlayer())
@@ -117,7 +130,12 @@ public class EnemyAI : MonoBehaviour
         }
         else
         {
-            if (enemy.attackTimer <= 0)
+            if (moveTimer > 0)
+            {
+                moveTimer -= Time.deltaTime;
+                return;
+            }
+            if (enemy.idleTimer <= 0)
             {
                 agent.isStopped = false;
                 agent.SetDestination(player.position);
@@ -128,5 +146,11 @@ public class EnemyAI : MonoBehaviour
     public void ActivateChasing()
     {
         isChasing = true;
+    }
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetStatic()
+    {
+        
+        AllActiveEnemies.Clear();
     }
 }
