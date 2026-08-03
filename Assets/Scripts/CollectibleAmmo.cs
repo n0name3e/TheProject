@@ -59,7 +59,7 @@ public class CollectibleAmmo : MonoBehaviour, IInteractable
         if (objectToDestroy != null)
         {
             Destroy(objectToDestroy);
-            isInteractable = false;
         }
+        isInteractable = false;
     }
 }

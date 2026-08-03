@@ -103,8 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bdfbe8a887d1b94eb90ff935c061528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
-  isRanged: 1
-  detectionRange: 100
+  detectionRange: 10
   validLayers:
     serializedVersion: 2
     m_Bits: 577
@@ -114,6 +113,7 @@ MonoBehaviour:
   isChasing: 0
   agent: {fileID: 2854849413175627228}
   enemy: {fileID: 2160165982021270692}
+  visionCheckInterval: 0.5
 --- !u!136 &5971779993745743854
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -616,7 +616,10 @@ MonoBehaviour:
   <MaxHealth>k__BackingField: 4
   isRanged: 0
   movementSpeed: 3
+  attackIdleCooldown: 1
+  hardIdleCooldown: 0.75
   attackCooldown: 2
+  hardAttackCooldown: 1.2
   attackRange: 2
   bulletSpeed: 10
   inaccuracyMultiplier: 1
@@ -624,13 +627,14 @@ MonoBehaviour:
   weapon: {fileID: 5991466126281073217}
   player: {fileID: 0}
   shootPosition: {fileID: 0}
-  bulletPrefab: {fileID: 0}
   agent: {fileID: 2854849413175627228}
   shootParticles: {fileID: 0}
   hitParticle: {fileID: 0}
   audioSource: {fileID: 8488185683330197136}
   shootSound: {fileID: 8300000, guid: 41c14eaa8a607fa49a164170c6ac7471, type: 3}
   hitSound: {fileID: 8300000, guid: c5f71d35529d5c7458259242566ba0f1, type: 3}
+  footstepClips: []
+  footstepInterval: 0.5
 --- !u!136 &5717439052733158864
 CapsuleCollider:
   m_ObjectHideFlags: 0

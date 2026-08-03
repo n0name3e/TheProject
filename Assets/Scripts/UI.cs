@@ -29,6 +29,7 @@ public class UI : MonoBehaviour
     private float deathTimer = 0f;
     private bool isDead = false;
     public bool isBoss = false;
+    public bool hasWon = false;
     public ParticleSystem explosionParticles; // why not
     public bool isCutscene = false;
     private int whiteHeartEnabled = 0;
@@ -36,6 +37,7 @@ public class UI : MonoBehaviour
     [SerializeField] private AudioSource eventSource;
     [SerializeField] private AudioClip victorySound;
     [SerializeField] private AudioClip defeatSound;
+    [SerializeField] private Image blackBackground;
 
     private void Awake()
     {
@@ -51,6 +53,7 @@ public class UI : MonoBehaviour
     private void Start()
     {
         DisableWhiteHeart();
+        StartCoroutine(BlackImageFade());
     }
     private void Update()
     {
@@ -61,7 +64,7 @@ public class UI : MonoBehaviour
         }
         if (yellowBossBarTimer > 0)
         {
-            yellowBossBarTimer -= Time.deltaTime;
+            yellowBossBarTimer -= Time.unscaledDeltaTime;
         }
         else
         {
@@ -69,7 +72,7 @@ public class UI : MonoBehaviour
         }
         if (bossHealthValue <= 0f && isBoss)
         {
-            deathBossTimer -= Time.deltaTime;
+            deathBossTimer -= Time.unscaledDeltaTime;
             if (deathBossTimer <= 0f)
             {
                 ActivateBossHealth(false);
@@ -79,7 +82,7 @@ public class UI : MonoBehaviour
         }
         if (isDead)
         {
-            deathTimer -= Time.deltaTime;
+            deathTimer -= Time.unscaledDeltaTime;
             if (deathTimer <= 0f)
             {
                 ShowDeathScreen();
@@ -193,6 +196,8 @@ public class UI : MonoBehaviour
         Time.timeScale = 0;
         Cursor.lockState = CursorLockMode.None;
         eventSource.PlayOneShot(victorySound);
+        hasWon = true;
+        DisableHUD();
     }
     public void ActivateBossHealth(bool activate)
     {
@@ -244,13 +249,46 @@ public class UI : MonoBehaviour
     }
     public void Restart()
     {
-        Time.timeScale = 1f;
-        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+        StartCoroutine(LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex));
+        //UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
     }
     public void MainMenu()
     {
+        StartCoroutine(LoadScene(0));
+        //UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+    }
+    private IEnumerator LoadScene(int index)
+    {
+        yield return null;
+        yield return BlackImageAppear();
         Time.timeScale = 1f;
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(index);  
+    }
+    private IEnumerator BlackImageAppear()
+    {
+        blackBackground.gameObject.SetActive(true);
+        while (blackBackground.color.a < 1f)
+        {
+            Color c = blackBackground.color;
+            c.a = Mathf.MoveTowards(blackBackground.color.a, 1f, Mathf.Min(Time.unscaledDeltaTime * 1f, 1f / 3f));
+            blackBackground.color = c;
+            yield return null;
+        }
+    }
+    private IEnumerator BlackImageFade()
+    {
+        blackBackground.gameObject.SetActive(true);
+        Color cc = blackBackground.color;
+        cc.a = 1f;
+        blackBackground.color = cc;
+        while (blackBackground.color.a > 0f)
+        {
+            Color c = blackBackground.color;
+            c.a = Mathf.MoveTowards(blackBackground.color.a, 0f, Mathf.Min(Time.unscaledDeltaTime * 1f, 1f / 3f));
+            blackBackground.color = c;
+            yield return null;
+        }
+        blackBackground.gameObject.SetActive(false);
     }
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void ResetStatic()

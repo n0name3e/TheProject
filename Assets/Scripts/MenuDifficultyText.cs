@@ -9,5 +9,6 @@ public class MenuDifficultyText : MonoBehaviour, IPointerEnterHandler
     public void OnPointerEnter(PointerEventData eventData)
     {
         arrow.position = new Vector2(arrow.position.x, transform.position.y);
+        MenuAudioManager.Instance.PlayButtonHoverSound();
     }
 }

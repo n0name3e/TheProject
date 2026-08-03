@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Transform creditsCameraPosition;
     [SerializeField] private Transform playCameraPosition;
     [SerializeField] private GameObject credits;
+    [SerializeField] private Image blackBackground;
 
     public CanvasGroup mainTitleUI;
     public CanvasGroup optionsUI;
@@ -28,11 +30,12 @@ public class MainMenu : MonoBehaviour
     private void Start()
     {
         mainCam = Camera.main;
+        StartCoroutine(BlackImageFade());
     }
 
     public void StartGame()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+        SceneManager.LoadScene(1);
     }
     public void Options()
     {
@@ -75,9 +78,34 @@ public class MainMenu : MonoBehaviour
     {
         //GameDifficulty.difficultyLevel = diff;
         GameDifficulty.difficulty = (DifficultyLevel)diff;
-        print(diff);
-
+        StartCoroutine(BlackImageAppear());
+    }
+    private IEnumerator BlackImageAppear()
+    {
+        blackBackground.gameObject.SetActive(true);
+        while (blackBackground.color.a < 1f)
+        {
+            Color c = blackBackground.color;
+            c.a = Mathf.MoveTowards(blackBackground.color.a, 1f, Mathf.Min(Time.unscaledDeltaTime * 1f, 1f / 3f));
+            blackBackground.color = c;
+            yield return null;
+        }
         SceneManager.LoadScene(1);
+    }
+    private IEnumerator BlackImageFade()
+    {
+        blackBackground.gameObject.SetActive(true);
+        Color cc = blackBackground.color;
+        cc.a = 1f;
+        blackBackground.color = cc;
+        while (blackBackground.color.a > 0f)
+        {
+            Color c = blackBackground.color;
+            c.a = Mathf.MoveTowards(blackBackground.color.a, 0f, Mathf.Min(Time.unscaledDeltaTime * 1f, 1f / 3f));
+            blackBackground.color = c;
+            yield return null;
+        }
+        blackBackground.gameObject.SetActive(false);
     }
     private IEnumerator SlideCameraToOptions()
     {

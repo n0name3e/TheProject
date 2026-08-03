@@ -68,4 +68,18 @@ public class Settings : MonoBehaviour
             colorAdjustments.postExposure.value = sliderValue;
         }
     }
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void ResetStatic()
+    {
+        // so that no warnings would be there
+        MusicVolume = 1f;
+        SoundVolume = 1f;
+        Sensitivity = 3f;
+        FOV = 90;
+        Brightness = 0.2f;
+        DeathCamera = true;
+        InvertY = false;
+
+        LoadSettings();
+    }
 }

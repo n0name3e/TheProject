@@ -1,10 +1,11 @@
-using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using Unity.AppUI.UI;
+using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-using Unity.AppUI.UI;
+using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class SettingsMenuManager : MonoBehaviour
 {
@@ -29,12 +30,16 @@ public class SettingsMenuManager : MonoBehaviour
     public Volume globalVolume;  // Drag your URP Global Volume here!
     private ColorAdjustments colorAdjustments;
 
-    private void Start()
+    private CameraController cameraController;
+
+    private void OnEnable()
     {
+        cameraController = FindAnyObjectByType<CameraController>();
+        Settings.LoadSettings();
         // 1. Hook into URP Brightness safely
         if (globalVolume != null && globalVolume.profile.TryGet(out colorAdjustments))
         {
-            // Successfully linked to Color Adjustments
+            if (colorAdjustments != null) colorAdjustments.postExposure.value = Settings.Brightness;
         }
 
         // 2. Make the UI match the hard drive data on boot
@@ -89,6 +94,11 @@ public class SettingsMenuManager : MonoBehaviour
     {
         Settings.Sensitivity = value;
         UpdateSensitivityText(value);
+
+        if (cameraController != null)
+        {
+            cameraController.sensitivity = value;
+        }
     }
 
     public void OnFOVSliderChanged(float value)
@@ -96,6 +106,10 @@ public class SettingsMenuManager : MonoBehaviour
         Settings.FOV = (int)value; // FOV must be a whole integer!
         UpdateFOVText(value);
 
+        if (cameraController != null)
+        {
+            Camera.main.fieldOfView = Settings.FOV;
+        }
         // Update the camera instantly so the player can see the change!
         //if (Camera.main != null) Camera.main.fieldOfView = Settings.FOV;
     }
@@ -114,6 +128,11 @@ public class SettingsMenuManager : MonoBehaviour
     public void OnInvertYCheckboxChanged(bool isOn)
     {
         Settings.InvertY = isOn;
+
+        if (cameraController != null)
+        {
+            cameraController.InvertY(isOn);
+        }
     }
 
     // ==========================================

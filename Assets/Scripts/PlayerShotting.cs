@@ -43,13 +43,14 @@ public class PlayerShotting : MonoBehaviour
                 StatsManager.Instance.hits++;
                 return;
             }
-            if (hitObject.GetComponentInChildren<Enemy>())
+            else if (hitObject.GetComponentInChildren<Enemy>())
             {
                 enemy = hitObject.GetComponentInChildren<Enemy>();
                 enemy.Hit();
                 hitParticles.transform.position = hit.point;
                 hitParticles.Emit(15);
                 StatsManager.Instance.hits++;
+                return;
             }
             if (hitObject.TryGetComponent(out Boss boss))
             {
@@ -64,17 +65,28 @@ public class PlayerShotting : MonoBehaviour
                 barrel.Explode();
 
                 Destroy(hitObject.gameObject);
+                StatsManager.Instance.barrelsExploded++;
+                return;
             }
             if (hitObject.TryGetComponent(out BreakablePallet pallet))
             {
                 pallet.Hit(3);
+                StatsManager.Instance.misses--;
+                StatsManager.Instance.palletHits++;
             }
             if (hitObject.TryGetComponent(out MonitorObject monitor))
             {
                 monitor.TakeDamage();
+                StatsManager.Instance.misses--;
+                return;
             }
             environmentHitParticles.transform.position = hit.point;
             environmentHitParticles.Emit(15);
+            StatsManager.Instance.misses++;
+        }
+        else
+        {
+            StatsManager.Instance.misses++;
         }
     }
 }

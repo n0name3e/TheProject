@@ -73,9 +73,11 @@ public class PlayerHealth : MonoBehaviour
         if (immunityTimer > 0f)
         {
             print("immune");
+            StatsManager.Instance.hitsTakenWhileImmune++;
             return;
         }
         health--;
+        StatsManager.Instance.hitsTaken++;
         UI.Instance.SetHealth(health, maxHealth);
         UI.Instance.ActivateDamageEffect();
         if (UI.Instance.isBoss)

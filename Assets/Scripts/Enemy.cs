@@ -26,6 +26,7 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] private Transform player;
     [SerializeField] private Transform shootPosition;
+    private WeaponManager playerWeaponManager;
 
     public float idleTimer { get; private set; } = 0f;
     public float attackTimer { get; private set; } = 0f;
@@ -62,6 +63,7 @@ public class Enemy : MonoBehaviour
         if (GameDifficulty.difficulty == DifficultyLevel.Easy)
         {
             MaxHealth--;
+            movementSpeed *= 0.85f;
         }
         if (GameDifficulty.difficulty == DifficultyLevel.Hard)
         {
@@ -74,6 +76,7 @@ public class Enemy : MonoBehaviour
         {
             player = FindAnyObjectByType<PlayerMovement>().transform;
         }
+        playerWeaponManager = player.GetComponent<WeaponManager>();
         bulletPoolManager = BulletPoolManager.Instance;
     }
 
@@ -118,6 +121,18 @@ public class Enemy : MonoBehaviour
                 drop.DropItem();
             }
             StatsManager.Instance.kills++;
+            if (damage >= 2)
+            {
+                StatsManager.Instance.barrelKills++;
+            }
+            else if (playerWeaponManager.currentWeapon == WeaponType.Rifle)
+            {
+                StatsManager.Instance.rifleKills++;
+            }
+            else
+            {
+                StatsManager.Instance.pistolKills++;
+            }
             audioSource.transform.SetParent(null, true);
             Destroy(audioSource.gameObject, 2f);
             Destroy(transform.parent.gameObject);

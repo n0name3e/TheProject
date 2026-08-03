@@ -28,7 +28,10 @@ public class CameraController : MonoBehaviour
             y = 1;
         }
     }
-
+    public void InvertY(bool invert)
+    {
+        y = invert ? 1 : -1;
+    }
     void Update()
     {
         // player is dead

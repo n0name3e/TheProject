@@ -42,6 +42,7 @@ public class PlayerInteracting : MonoBehaviour
                 if (currentInteractable.isInteractable)
                 {
                     currentInteractable.Interact();
+                    StatsManager.Instance.objectsInteracted++;
                     if (currentInteractable.interactSound != null)
                     {
                         interactionSource.pitch = Random.Range(0.9f, 1.1f);

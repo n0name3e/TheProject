@@ -8,8 +8,8 @@ public class Boss : MonoBehaviour
     private static readonly int MinigunThrustHash = Animator.StringToHash("MinigunThrust");
     private static readonly int SummonSkeletonHash = Animator.StringToHash("SummonSkeleton");
 
-    [field: SerializeField] public float MaxHealth { get; private set; } = 60f;
-    public float Health { get; private set; } = 60f;
+    [field: SerializeField] public int MaxHealth { get; private set; } = 60;
+    public int Health { get; private set; } = 60;
 
     [SerializeField] private float movementSpeed = 3.75f;
     [Space(5)]
@@ -21,6 +21,7 @@ public class Boss : MonoBehaviour
     [SerializeField] private Sledgehammer weapon;
 
     [SerializeField] private Transform player;
+    private WeaponManager playerWeaponManager;
     [SerializeField] private Transform shootPosition;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private GameObject grenadePrefab;
@@ -42,6 +43,7 @@ public class Boss : MonoBehaviour
     [SerializeField] private AudioClip grenadeThrowSound;
     [SerializeField] private AudioClip meleeAttackSound;
     [SerializeField] private AudioClip hitSound;
+    [SerializeField] private GameObject bossRagdoll;
 
     [SerializeField] private AudioClip[] footstepClips;
     [SerializeField] private float footstepInterval = 0.8f;
@@ -58,17 +60,17 @@ public class Boss : MonoBehaviour
     {
         if (GameDifficulty.difficulty == DifficultyLevel.Easy)
         {
-            MaxHealth = 45f;
+            MaxHealth = 45;
             minigunBullets = 15;
         }
         else if (GameDifficulty.difficulty == DifficultyLevel.Medium)
         {
-            MaxHealth = 60f;
+            MaxHealth = 60;
             minigunBullets = 20;
         }
         else if (GameDifficulty.difficulty == DifficultyLevel.Hard)
         {
-            MaxHealth = 66f;
+            MaxHealth = 61;
             minigunBullets = 30;
         }
         Health = MaxHealth;
@@ -77,6 +79,7 @@ public class Boss : MonoBehaviour
         {
             player = FindAnyObjectByType<PlayerMovement>().transform;
         }
+        playerWeaponManager = player.GetComponent<WeaponManager>();
         bulletPoolManager = BulletPoolManager.Instance;
     }
 
@@ -141,6 +144,20 @@ public class Boss : MonoBehaviour
             keyHatch.transform.SetParent(null, true);
             keyHatch.SetActive(true);
             StatsManager.Instance.kills++;
+            if (damage >= 2)
+            {
+                StatsManager.Instance.barrelKills++;
+            }
+            else if (playerWeaponManager.currentWeapon == WeaponType.Rifle)
+            {
+                StatsManager.Instance.rifleKills++;
+            }
+            else
+            {
+                StatsManager.Instance.pistolKills++;
+            }
+            bossRagdoll.transform.SetParent(null, true);
+            bossRagdoll.SetActive(true);
             Destroy(transform.parent.gameObject);
         }
     }

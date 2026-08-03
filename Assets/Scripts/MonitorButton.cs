@@ -7,6 +7,7 @@ public class MonitorButton : MonoBehaviour
     private Color normalColor;
     private Color emissionColor;
     [SerializeField] private Renderer buttonRenderer;
+    [SerializeField] private bool isSign = false;
     
     [ColorUsage(true, true)] [SerializeField] private Color hoverColor;
     private Material material;
@@ -24,6 +25,14 @@ public class MonitorButton : MonoBehaviour
     {
         material.color = hoverColor;
         material.SetColor("_EmissionColor", hoverColor);
+        if (isSign)
+        {
+            MenuAudioManager.Instance.PlaySignHoverSound();
+        }
+        else
+        {
+            MenuAudioManager.Instance.PlayMonitorHoverSound();
+        }
         print("enter");
     }
     private void OnMouseExit()
@@ -34,6 +43,14 @@ public class MonitorButton : MonoBehaviour
     }
     private void OnMouseDown()
     {
+        if (isSign)
+        {
+            MenuAudioManager.Instance.PlaySignClickSound();
+        }
+        else
+        {
+            MenuAudioManager.Instance.PlayMonitorClickSound();
+        }
         print("Click");
         onClick?.Invoke();
     }
