@@ -47,13 +47,12 @@ public class DoorControl : MonoBehaviour
     {
         foreach (DatabaseEntry entry in passwordTable.data)
         {
-            if (entry.column.ToLower() == "permission")
+            if (entry.column.ToLower() == "permission_id")
             {
                 for (int i = 0; i < entry.rows.Count; i++)
                 {
                     if (entry.rows[i] == doorId.ToString())
                     {
-                        print("password: +" + passwordTable.data.Find(e => e.column == "password").rows[i]);
                         return passwordTable.data.Find(e => e.column == "password").rows[i];
                     }
                 }
@@ -90,6 +89,7 @@ public class DoorControl : MonoBehaviour
     {
         string inputPassword = passwordField.text;
 
+        print(SetCorrectPassword());
         if (inputPassword == SetCorrectPassword())
         {
             incorrectPasswordText.SetActive(false);

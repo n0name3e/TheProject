@@ -20,7 +20,7 @@ public class BossCutscene : MonoBehaviour
     
     private void Update()
     {
-        if (UI.Instance.isCutscene && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Escape)))
+        if (UI.Instance.isCutscene && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Tab)))
         {
             if (cutscene.state == PlayState.Playing)
             {

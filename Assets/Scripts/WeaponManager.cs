@@ -69,6 +69,8 @@ public class WeaponManager : MonoBehaviour
     {
         isInteracting = animator.GetCurrentAnimatorStateInfo(0).IsTag("interact");
     
+        if (Time.timeScale <= 0)
+            return;
         if (Input.GetKeyDown(KeyCode.Alpha1) && hasRifle)
         {
             UnequipPistol(); // rifle
@@ -110,14 +112,15 @@ public class WeaponManager : MonoBehaviour
     }
     public void CollectRifle()
     {
-        rifleCurrentAmmo = rifleMaxAmmo;
         if (!hasRifle)
         {
+            rifleCurrentAmmo = rifleMaxAmmo;
             hasRifle = true;
             UnequipPistol();
         }
         if (currentWeapon == WeaponType.Rifle)
         {
+            rifleAvailableAmmo += 15;
             UI.Instance.SetAmmoText(rifleCurrentAmmo, rifleMaxAmmo, rifleAvailableAmmo);
         }
     }

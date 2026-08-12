@@ -26,11 +26,34 @@ public class MainMenu : MonoBehaviour
     private bool isCredits = false;
     private bool isPlay = false;
     private Camera mainCam;
+    [SerializeField] private GameObject exitHover;
 
     private void Start()
     {
         mainCam = Camera.main;
         StartCoroutine(BlackImageFade());
+    }
+
+    private void Update()
+    {
+        if (isMoving || isOptions)
+        {
+            exitHover.SetActive(false);
+
+        }
+        else
+        {
+            exitHover.SetActive(true);
+        }
+            if (Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (isMoving)
+                return;
+            if (isOptions || isCredits || isPlay)
+            {
+                StartCoroutine(SlideCameraToMain());
+            }
+        }
     }
 
     public void StartGame()
@@ -80,6 +103,13 @@ public class MainMenu : MonoBehaviour
         GameDifficulty.difficulty = (DifficultyLevel)diff;
         StartCoroutine(BlackImageAppear());
     }
+    public void Quit()
+    {
+        if (isMoving || isOptions)
+            return;
+        Application.Quit();
+        print("Quit");
+    }
     private IEnumerator BlackImageAppear()
     {
         blackBackground.gameObject.SetActive(true);
@@ -101,7 +131,7 @@ public class MainMenu : MonoBehaviour
         while (blackBackground.color.a > 0f)
         {
             Color c = blackBackground.color;
-            c.a = Mathf.MoveTowards(blackBackground.color.a, 0f, Mathf.Min(Time.unscaledDeltaTime * 1f, 1f / 3f));
+            c.a = Mathf.MoveTowards(blackBackground.color.a, 0f, Mathf.Min(Time.unscaledDeltaTime * 1f, 1f / 4f));
             blackBackground.color = c;
             yield return null;
         }

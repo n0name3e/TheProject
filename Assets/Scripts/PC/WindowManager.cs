@@ -21,13 +21,21 @@ public class WindowManager : MonoBehaviour
         currentActiveWindow = window;
     }
     public void CloseCurrentWindow() {
-        audioSource.PlayOneShot(windowSound);
-        currentActiveWindow.SetActive(false);
-        currentActiveWindow = null;
+        if (currentActiveWindow != null)
+        {
+            audioSource.PlayOneShot(windowSound);
+            currentActiveWindow.SetActive(false);
+            currentActiveWindow = null;
+        }
+
+        else {
+            audioSource.PlayOneShot(windowSound);
+            UI.Instance.DisablePC();
+        }
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)) // as windowManager is disabled in runtime, it won't cause problems
+        if (Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.Escape)) // as windowManager is disabled in runtime, it won't cause problems
         {
             if (currentActiveWindow != null)
             {

@@ -29,6 +29,7 @@ public class Boss : MonoBehaviour
     [SerializeField] private Transform eyePosition;
     [SerializeField] private GameObject keyHatch;
     [SerializeField] private List<EnemyAI> skeletons = new List<EnemyAI>();
+    private List<EnemyAI> summonedSkeletons = new List<EnemyAI>();
     private BulletPoolManager bulletPoolManager;
     public float attackTimer { get; private set; } = 0f;
     public float idleTimer { get; private set; } = 0f; // when boss does'nt attack but move
@@ -155,6 +156,16 @@ public class Boss : MonoBehaviour
             else
             {
                 StatsManager.Instance.pistolKills++;
+            }
+            if (summonedSkeletons.Count > 0)
+            {
+                foreach (EnemyAI skeleton in summonedSkeletons)
+                {
+                    if (skeleton != null)
+                    {
+                        skeleton.GetComponentInChildren<Enemy>().Hit(6, true);
+                    }
+                }
             }
             bossRagdoll.transform.SetParent(null, true);
             bossRagdoll.SetActive(true);
@@ -286,6 +297,7 @@ public class Boss : MonoBehaviour
         {
             currentSkeleton.gameObject.SetActive(true);
             currentSkeleton.ActivateChasing();
+            summonedSkeletons.Add(currentSkeleton);
             skeletons.Remove(currentSkeleton);
             audioSource.PlayOneShot(summonSkeletonSound);
             if (GameDifficulty.difficulty == DifficultyLevel.Hard)

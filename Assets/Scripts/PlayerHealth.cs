@@ -72,7 +72,6 @@ public class PlayerHealth : MonoBehaviour
     {
         if (immunityTimer > 0f)
         {
-            print("immune");
             StatsManager.Instance.hitsTakenWhileImmune++;
             return;
         }

@@ -118,7 +118,6 @@ public class EnemyAI : MonoBehaviour
     }
     private void ChasePlayer()
     {
-
         if (Vector3.Distance(player.position + new Vector3(0, 1, 0), transform.position) <= attackRange)
         {
             if (CanSeePlayer())

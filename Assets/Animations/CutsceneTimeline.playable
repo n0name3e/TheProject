@@ -1,5 +1,22 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8772815742941757114
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f10dd60657c6004587f237a7e90f8e4, type: 3}
+  m_Name: AudioPlayableAsset
+  m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.AudioPlayableAsset
+  m_Clip: {fileID: 8300000, guid: 540a9f378a6e99944b4df4ccc1462740, type: 3}
+  m_Loop: 0
+  m_bufferingTime: 0.1
+  m_ClipProperties:
+    volume: 1
 --- !u!114 &-8562543991656953726
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -921,7 +938,7 @@ MonoBehaviour:
     m_TimeScale: 1
     m_ParentTrack: {fileID: -1923532102236594517}
     m_EaseInDuration: 0
-    m_EaseOutDuration: 1
+    m_EaseOutDuration: 0.75
     m_BlendInDuration: -1
     m_BlendOutDuration: -1
     m_MixInCurve:
@@ -1030,7 +1047,16 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: -0.9993911, z: 0.034898758}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: 0, y: 0, z: 0}
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+      - serializedVersion: 3
+        time: 1.8333334
+        value: {x: 0, y: -1.4204578, z: 2.303979}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
@@ -1039,7 +1065,7 @@ AnimationClip:
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
         time: 1.85
-        value: {x: 0, y: -0.7594955, z: 1.4603977}
+        value: {x: 0, y: -1.4204578, z: 2.303979}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
@@ -1105,6 +1131,15 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
+        time: 1.8333334
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
         time: 1.85
         value: 0
         inSlope: 0
@@ -1127,7 +1162,16 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: -0.9993911
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.8333334
+        value: -1.4204578
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1136,7 +1180,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1.85
-        value: -0.7594955
+        value: -1.4204578
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1157,7 +1201,16 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: 0.034898758
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.8333334
+        value: 2.303979
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1166,7 +1219,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1.85
-        value: 1.4603977
+        value: 2.303979
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1332,7 +1385,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: -0.99939084, z: 0.034898758}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
@@ -1341,7 +1394,7 @@ AnimationClip:
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
         time: 0.083333015
-        value: {x: 0, y: 0.049969673, z: -0.0017461777}
+        value: {x: 0, y: -0.9494214, z: 0.03315258}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
@@ -1350,7 +1403,7 @@ AnimationClip:
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
         time: 0.16666603
-        value: {x: 0, y: -0.049969673, z: 0.001742363}
+        value: {x: 0, y: -1.0493605, z: 0.036639214}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
@@ -1359,7 +1412,7 @@ AnimationClip:
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
         time: 0.33333302
-        value: {x: 0, y: 0.049969673, z: -0.001748085}
+        value: {x: 0, y: -0.94942164, z: 0.033150673}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
@@ -1368,7 +1421,7 @@ AnimationClip:
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
         time: 0.41666666
-        value: {x: 0, y: 0, z: -0.000002861023}
+        value: {x: 0, y: -0.9993911, z: 0.034895897}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
@@ -1483,7 +1536,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: -0.99939084
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1492,7 +1545,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.083333015
-        value: 0.049969673
+        value: -0.9494214
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1501,7 +1554,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.16666603
-        value: -0.049969673
+        value: -1.0493605
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1510,7 +1563,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.33333302
-        value: 0.049969673
+        value: -0.94942164
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1519,7 +1572,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.41666666
-        value: 0
+        value: -0.9993911
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1540,7 +1593,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: 0.034898758
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1549,7 +1602,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.083333015
-        value: -0.0017461777
+        value: 0.03315258
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1558,7 +1611,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.16666603
-        value: 0.001742363
+        value: 0.036639214
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1567,7 +1620,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.33333302
-        value: -0.001748085
+        value: 0.033150673
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1576,7 +1629,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.41666666
-        value: -0.000002861023
+        value: 0.034895897
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1614,10 +1667,10 @@ MonoBehaviour:
   - {fileID: 3130260741266940573}
   - {fileID: -8562543991656953726}
   - {fileID: 2482904180075650759}
+  - {fileID: -4546601661684072887}
   - {fileID: 5525029928636389954}
   - {fileID: -8326755773161615527}
   - {fileID: -8090103675682767562}
-  - {fileID: -4546601661684072887}
   - {fileID: 7098918104532628054}
   - {fileID: -7709459428721602081}
   - {fileID: -4319934488457145566}
@@ -1877,7 +1930,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: roar
   - m_Version: 1
-    m_Start: 9.016666666666667
+    m_Start: 8.833333333333334
     m_ClipIn: 0
     m_Asset: {fileID: -7148419939250853037}
     m_Duration: 0.44285714285714306
@@ -2009,6 +2062,57 @@ MonoBehaviour:
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 0
+    m_DisplayName: 383842__deleted_user_7146007__old-light-switch
+  - m_Version: 1
+    m_Start: 3.466666666666667
+    m_ClipIn: 0
+    m_Asset: {fileID: -8772815742941757114}
+    m_Duration: 2.583333333333333
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: 991998861042961841}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: -1
+    m_BlendOutDuration: -1
+    m_MixInCurve:
+      serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
@@ -2064,7 +2168,7 @@ MonoBehaviour:
     m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
-    m_DisplayName: 383842__deleted_user_7146007__old-light-switch
+    m_DisplayName: serverRoom
   m_Markers:
     m_Objects: []
   m_TrackProperties:

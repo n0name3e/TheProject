@@ -117,7 +117,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4452716169846927329}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.7111098, z: -0, w: 0.703081}
+  m_LocalRotation: {x: 0, y: 0.71111244, z: 0, w: 0.7030783}
   m_LocalPosition: {x: 15.899586, y: 0, z: -19.366327}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -125,7 +125,7 @@ Transform:
   - {fileID: 8775718956070751927}
   - {fileID: 2400359182704484737}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90.651, z: 0}
 --- !u!65 &1731503844658618196
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -224,7 +224,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 8619355570696429974, guid: 74aedfa1abeed044fa7a1bfa83aa08f3, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -233,8 +233,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 8
-  MaxDistance: 56
+  MinDistance: 10
+  MaxDistance: 40
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -269,7 +269,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0

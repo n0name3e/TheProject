@@ -1,11 +1,9 @@
 using TMPro;
-using Unity.AppUI.UI;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
-using static UnityEngine.Rendering.DebugUI;
 
 public class SettingsMenuManager : MonoBehaviour
 {

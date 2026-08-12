@@ -14,6 +14,7 @@ public class CardSwipe : MonoBehaviour, IInteractable
     {
         doorToActivate.isInteractable = true;
         GetComponent<Animator>().Play("Swipe");
+        nonInteractableText = "";
         isInteractable = false;
     }
 }

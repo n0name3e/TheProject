@@ -36,7 +36,7 @@ public class StatsManager : MonoBehaviour
     {
         if (Pause.isPaused || UI.Instance.hasWon) return;
         time += Time.unscaledDeltaTime; // works in monitor
-        if (UI.Instance.isBoss)
+        if (UI.Instance.isBoss && !UI.Instance.isCutscene)
         {
             bossTime += Time.unscaledDeltaTime;
         }

@@ -33,13 +33,11 @@ public class MonitorButton : MonoBehaviour
         {
             MenuAudioManager.Instance.PlayMonitorHoverSound();
         }
-        print("enter");
     }
     private void OnMouseExit()
     {
         material.color = normalColor;
         material.SetColor("_EmissionColor", emissionColor);
-        print("exit");
     }
     private void OnMouseDown()
     {
@@ -51,7 +49,6 @@ public class MonitorButton : MonoBehaviour
         {
             MenuAudioManager.Instance.PlayMonitorClickSound();
         }
-        print("Click");
         onClick?.Invoke();
     }
 }

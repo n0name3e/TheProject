@@ -13,7 +13,7 @@ public class Pause : MonoBehaviour
 
     private void Update()
     {
-        if (!UI.Instance.isCutscene && Input.GetKeyDown(KeyCode.Escape) && ((!isPaused && Time.timeScale == 1f) || (isPaused && Time.timeScale == 0f)))
+        if (!UI.Instance.isCutscene && (Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.Escape)) && ((!isPaused && Time.timeScale == 1f) || (isPaused && Time.timeScale == 0f)))
         {
             if (!isPaused)
             {
@@ -24,6 +24,12 @@ public class Pause : MonoBehaviour
                 UnPause();
             }
         }
+/*#if UNITY_WEBGL
+        if (!isPaused && Cursor.lockState != CursorLockMode.Locked)
+        {
+            Pausing(); // Force the game to pause!
+        }
+#endif*/
     }
 
     public void Pausing()

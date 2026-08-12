@@ -9,6 +9,7 @@ public class FallingEnemy : MonoBehaviour
     {
         isFalling = true;
         GetComponent<NavMeshAgent>().enabled = false;
+        GetComponent<EnemyAI>().enabled = false;
         GetComponent<Rigidbody>().isKinematic = false;
     }
     private void OnCollisionEnter(Collision collision)

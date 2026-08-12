@@ -47,6 +47,7 @@ public class Grenade : MonoBehaviour
         {
             roomBreaker.Break();
         }
+        audioSource.minDistance = 30f;
         audioSource.transform.SetParent(null, true);
         audioSource.PlayOneShot(explosionSound);
         Destroy(audioSource.gameObject, 2f);

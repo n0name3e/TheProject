@@ -467,6 +467,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7635826562936255635, guid: 0426fc4f7a937bb46b7d0259f955d675, type: 3}
+      propertyPath: m_LightProbeUsage
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 0426fc4f7a937bb46b7d0259f955d675, type: 3}
       propertyPath: m_Name
       value: _skeletonArm
@@ -544,6 +548,10 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 52f8e82453f0b3d46a955b04c9cae836, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7635826562936255635, guid: 52f8e82453f0b3d46a955b04c9cae836, type: 3}
+      propertyPath: m_LightProbeUsage
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 52f8e82453f0b3d46a955b04c9cae836, type: 3}
       propertyPath: m_Name
@@ -722,6 +730,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7635826562936255635, guid: 2c0f484ec8d34634dbc3c81525f92b66, type: 3}
+      propertyPath: m_LightProbeUsage
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2c0f484ec8d34634dbc3c81525f92b66, type: 3}
       propertyPath: m_Name
       value: _zweihander
@@ -811,6 +823,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0426fc4f7a937bb46b7d0259f955d675, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7635826562936255635, guid: 0426fc4f7a937bb46b7d0259f955d675, type: 3}
+      propertyPath: m_LightProbeUsage
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 0426fc4f7a937bb46b7d0259f955d675, type: 3}

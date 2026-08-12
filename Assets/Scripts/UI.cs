@@ -38,6 +38,7 @@ public class UI : MonoBehaviour
     [SerializeField] private AudioClip victorySound;
     [SerializeField] private AudioClip defeatSound;
     [SerializeField] private Image blackBackground;
+    public int emptyDropsInARow = 0;
 
     private void Awake()
     {
@@ -57,6 +58,13 @@ public class UI : MonoBehaviour
     }
     private void Update()
     {
+        if (Cursor.lockState == CursorLockMode.None)
+        {
+            if (Time.timeScale >= 1f && Input.GetMouseButtonDown(0))
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+        }
         if (damageOverlay.color.a > 0 && !isDead) {
             Color c = damageOverlay.color;
             c.a = Mathf.MoveTowards(c.a, 0f, Time.deltaTime / 2f);

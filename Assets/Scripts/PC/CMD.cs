@@ -6,7 +6,7 @@ using System.Text;
 using TMPro;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger; // Ok
-using static UnityEngine.Rendering.DebugUI;
+using static UnityEngine.Rendering.DebugUI; // oK
 using static UnityEngine.Rendering.DebugUI.Table; // OK
 
 public class CMD : MonoBehaviour

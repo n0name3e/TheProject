@@ -9,9 +9,25 @@ public class Drop : MonoBehaviour
     {
         if (droppedObject == null)
             return;
+        if (UI.Instance.emptyDropsInARow >= 3)
+        {
+            if (chance < 1f)
+            {
+                chance += (0.15f * (UI.Instance.emptyDropsInARow - 2));
+                chance = Mathf.Clamp(chance, 0f, 0.95f);
+            }
+        }
         if (Random.value <= chance)
         {
             Instantiate(droppedObject, transform.position, Quaternion.identity);
+            if (chance < 1f)
+            {
+                UI.Instance.emptyDropsInARow = 0;
+            }
+        }
+        else
+        {
+            UI.Instance.emptyDropsInARow++;
         }
     }
 }

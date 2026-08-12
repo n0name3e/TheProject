@@ -22,7 +22,6 @@ public class Table : ScriptableObject
             for (int j = 0; j < data[i].rows.Count; j++)
             {
                 data[i].rows[j] = Random.Range(100, 1000).ToString();
-                Debug.Log($"Randomized password for row {j}: {data[i].rows[j]}");
             }
             break;
             //data[i].rows[] = Random.Range(100, 1000).ToString();
